@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps";
 import APIContext from '../APIContext';
+import config from '../config';
 import './SearchMap.css';
 
 
@@ -19,7 +20,7 @@ class SearchMap extends Component {
 
     updateCoordinates = searchVal => {
         const str = searchVal.replace(/-/g, '+');
-        const fetchStr = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + str + '&key=AIzaSyDFFvmBKhgEPjsrftIYez2j2ZrfyJ7xEeU'
+        const fetchStr = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + str + '&key=' + `${config.GOOGLE_API_KEY}`
 
         fetch(fetchStr)
         .then(response => response.json())
@@ -64,7 +65,7 @@ class SearchMap extends Component {
                 <MapComponent
                     center={this.state.latitude, this.state.longitude}
                     isMarkerShown
-                    googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyDFFvmBKhgEPjsrftIYez2j2ZrfyJ7xEeU"
+                    googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${config.GOOGLE_API_KEY}`}
                     loadingElement={<div style={{ height: `100%` }} />}
                     containerElement={<div style={{ height: `300px` }} />}
                     mapElement={<div style={{ height: `100%` }} />}
