@@ -51,6 +51,9 @@ class SearchMap extends Component {
     };
 
     render(){
+        console.log(config)
+        console.log(`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${config.GOOGLE_API_KEY}`)
+
         const MapComponent = withScriptjs(withGoogleMap((props) => (
             <GoogleMap
                 defaultZoom={14} 
