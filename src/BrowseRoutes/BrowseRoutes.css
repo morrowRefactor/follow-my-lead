@@ -1,0 +1,18 @@
+.BrowseRoutes {
+    width: 90%;
+    text-align: center;
+}
+
+.Filters {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 90%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+button {
+    padding: 3px 10px 3px 10px;
+    border-radius: 5px;
+}

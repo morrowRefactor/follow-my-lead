@@ -1,0 +1,21 @@
+.Home {
+    text-align: center;
+    width: 90%;
+    margin-left: 0px auto 10px auto;
+}
+
+h2 {
+    font-size: 20px;
+}
+
+.HomeLink {
+    text-decoration: none;
+}
+
+.Image {
+    display: inline-block;
+    border: solid 1px black;
+    width: 70%;
+    height: 50px;
+    line-height: 50px;
+}

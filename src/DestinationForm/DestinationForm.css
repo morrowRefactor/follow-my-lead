@@ -1,0 +1,21 @@
+.DestinationForm {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.AddressForm {
+    margin-bottom: 30px;
+}
+
+#description {
+    height: 80px;
+}
+
+.descText {
+    font-size: 12px;
+    margin: 0px;
+}
+
+#sequence {
+    width: 55px;
+}

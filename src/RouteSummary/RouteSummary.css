@@ -1,0 +1,26 @@
+.RouteSummary {
+    padding: 10px;
+    margin: 10px auto 10px auto;
+    background-color: rgb(209, 207, 207);
+}
+
+h3 {
+    margin: 0px auto 0px auto;
+}
+
+.RouteLink {
+    text-decoration: none;
+}
+
+.SummImage {
+    display: inline-block;
+    border: 1px solid black;
+    width: 90%;
+    height: 50px;
+    line-height: 50px;
+    margin-top: 10px;
+}
+
+.Location {
+    text-align: left;
+}

@@ -1,0 +1,28 @@
+.RoutePage {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Image {
+    width: 70%;
+    border: solid 1px black;
+    height: 200px;
+    line-height: 200px;
+    text-align: center;
+}
+
+button {
+    margin: 10px auto 10px auto;
+}
+
+.DestinationList {
+    width: 100%;
+}
+
+.Destination {
+    width: 100%;
+    background-color: rgb(211, 210, 210);
+    margin-bottom: 10px;
+}
