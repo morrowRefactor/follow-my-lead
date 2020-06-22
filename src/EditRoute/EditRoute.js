@@ -1,63 +1,94 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import APIContext from '../APIContext';
-import './CreateRoute.css';
+import './EditRoute.css';
 
-class CreateRoute extends Component {
+class EditRoute extends Component {
     static contextType = APIContext;
 
     validateInput = e => {
         e.preventDefault();
+        const routeID = this.props.match.params.route_id;
+        const randLocID = Math.floor((Math.random() * 1000) + 1);
+        const routeObj = this.context.routes.filter(obj => {
+            return obj.id === parseInt(routeID)
+        })
+        const routeTypeObj = this.context.routeTypes.filter(obj => {
+            return obj.type === document.getElementById('routeType').value
+        })
         const input = {
+            routeID: parseInt(routeID),
             name: document.getElementById('name').value,
-            routeType: document.getElementById('routeType').value,
+            routeType: routeTypeObj[0].id,
             routeSumm: document.getElementById('summary').value,
+            locID: randLocID,
             city: document.getElementById('city').value,
             province: document.getElementById('state_province').value,
             country: document.getElementById('country').value
         }
 
-       this.handleSubmit(input);
+        this.handleSubmit(input)
     };
 
     handleSubmit(input) {
-        const randLocID = Math.floor((Math.random() * 1000) + 1);
-        const newLocation = {
-            id: randLocID,
-            city: input.city,
-            state_province: input.state_province,
-            country: input.country
-        }
-        let routeID = 0;
-        for(let i = 0; i < this.context.routeTypes.length; i++) {
-            if(this.context.routeTypes[i].type === input.routeType) {
-                routeID = this.context.routeTypes[i].id;
-            }
-        }
-        const randRouteID = Math.floor((Math.random() * 1000) + 1);
         const newRoute = {
-            id: randRouteID,
+            id: input.routeID,
             route_name: input.name,
             route_summ: input.routeSumm,
-            route_type_id: routeID,
-            route_location: randLocID
+            route_type_id: input.routeType,
+            route_location: input.locID
+        }
+        const newLocation = {
+            id: input.locID,
+            city: input.city,
+            state_province: input.province,
+            country: input.country
         }
         
-        this.context.addLocation(newLocation);
-        this.context.addRoute(newRoute);
-        this.props.history.push(`/create-route/add-destinations/${randRouteID}`);
+        this.context.updateLocation(newLocation);
+        this.context.updateRoute(newRoute);
+        this.props.history.push('/');
     }
 
     handleClickCancel = () => {
-        this.props.history.push('/')
+        const routeID = this.props.match.params.route_id;
+        this.props.history.push(`/routes/${parseInt(routeID)}`);
     };
 
+    handleRouteDelete = id => {
+        this.context.deleteRoute(id);
+        this.props.history.push('/');
+    }
+
     render() {
+        let routeToEdit = {};
+        let routeLocation = {};
+        const routeID = this.props.match.params.route_id;
+        for(let i = 0; i < this.context.routes.length; i++) {
+            if (this.context.routes[i].id === parseInt(routeID)) {
+                routeToEdit = {
+                    routeName: this.context.routes[i].route_name,
+                    routeSumm: this.context.routes[i].route_summ,
+                    location: this.context.routes[i].route_location,
+                    routeType: this.context.routes[i].route_type_id
+                }
+            }
+        }
+        for(let i = 0; i < this.context.locations.length; i++) {
+            if(this.context.locations[i].id === routeToEdit.location) {
+                routeLocation = {
+                    id: this.context.locations[i].id,
+                    city: this.context.locations[i].city,
+                    state_province: this.context.locations[i].state_province,
+                    country: this.context.locations[i].country
+                }
+            }
+        }
         const routeTypes = this.context.routeTypes;
 
         return (
             <section className="CreateRoute">
-                <h3>Create a Custom Route</h3>
+                <h3>Edit Route</h3>
                 <form 
                     className='CreateRouteForm'
                     onSubmit={this.validateInput}
@@ -70,7 +101,7 @@ class CreateRoute extends Component {
                             type='text'
                             name='name'
                             id='name'
-                            placeholder='My New Route'
+                            placeholder={routeToEdit.routeName}
                             required
                         />
                         <label htmlFor='routeType'>
@@ -94,7 +125,7 @@ class CreateRoute extends Component {
                             type='text'
                             name='summary'
                             id='summary'
-                            placeholder='Enter a brief summary of your route'
+                            placeholder={routeToEdit.routeSumm}
                             required
                         />
                         <label htmlFor='city'>
@@ -104,7 +135,7 @@ class CreateRoute extends Component {
                             type='text'
                             name='city'
                             id='city'
-                            placeholder='New York'
+                            placeholder={routeLocation.city}
                             required
                         />
                         <label htmlFor='state_province'>
@@ -114,7 +145,7 @@ class CreateRoute extends Component {
                             type='text'
                             name='state_province'
                             id='state_province'
-                            placeholder='New York'
+                            placeholder={routeLocation.state_province}
                             required
                         />
                         <label htmlFor='country'>
@@ -124,17 +155,21 @@ class CreateRoute extends Component {
                             type='text'
                             name='country'
                             id='country'
-                            placeholder='United States'
+                            placeholder={routeLocation.country}
                             required
                         />
                     </div>
                     <div className='CreateRouteButtons'>
                         <button type='submit'>
-                            Save
+                            Save Changes
                         </button>
                         {' '}
                         <button type='button' onClick={this.handleClickCancel}>
                             Cancel
+                        </button>
+                        {' '}
+                        <button type='button' onClick={() => this.handleRouteDelete(parseInt(routeID))}>
+                            Delete Route
                         </button>
                     </div>
                 </form>
@@ -143,4 +178,4 @@ class CreateRoute extends Component {
     };
 }
 
-export default withRouter(CreateRoute);
+export default withRouter(EditRoute);

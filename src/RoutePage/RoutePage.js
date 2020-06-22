@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import Destination from '../Destination/Destination';
 import APIContext from '../APIContext';
 import './RoutePage.css';
 
 class RoutePage extends Component {
     static contextType = APIContext;
+
+    handleEditRoute =id => {
+        this.props.history.push(`/edit-route/${id}`);
+    }
 
     render() {
         let routeID = this.props.match.params.route_id;
@@ -63,7 +68,11 @@ class RoutePage extends Component {
                 <h3>{route.name}</h3>
                 <span>{location.city}, {location.state_province}</span>
                 <div className='Image'>[image]</div>
-                <button>Start Route</button>
+                <div className='RoutePageButtons'>
+                    <button>Start Route</button>
+                    {' '}
+                    <button onClick={() => this.handleEditRoute(parseInt(routeID))}>Edit Route</button>
+                </div>
                 <div className='DestinationList'>
                    {destinations}
                 </div>
@@ -72,4 +81,4 @@ class RoutePage extends Component {
     };
 }
 
-export default RoutePage;
+export default withRouter(RoutePage);

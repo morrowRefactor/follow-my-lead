@@ -6,6 +6,7 @@ import BrowseRoutes from '../BrowseRoutes/BrowseRoutes';
 import RoutePage from '../RoutePage/RoutePage';
 import CreateRoute from '../CreateRoute/CreateRoute';
 import AddDestination from '../AddDestination/AddDestination';
+import EditRoute from '../EditRoute/EditRoute';
 import APIContext from '../APIContext';
 import DummyStore from '../dummy-store';
 import config from '../config';
@@ -88,6 +89,33 @@ class App extends Component {
     })
   }
 
+  updateRoute = route => {
+    const updateRoutes = this.state.routes.filter(obj => {
+      return obj.id !== route.id
+    });
+    updateRoutes.push(route);
+    this.setState({
+      routes: updateRoutes
+    })
+  }
+
+  updateLocation = loc => {
+    const newLoc = this.state.locations;
+    newLoc.push(loc);
+    this.setState({
+      locations: newLoc
+    })
+  }
+
+  deleteRoute = id => {
+    const newRoutes = this.state.routes.filter(obj => {
+      return obj.id !== id
+    });
+    this.setState({
+      routes: newRoutes
+    })
+  }
+
   render() {
     const value = {
       routeTypes: this.state.routeTypes,
@@ -104,7 +132,10 @@ class App extends Component {
       addLocation: this.addLocation,
       addDest: this.addDest,
       addressTransfer: this.addressTransfer,
-      setDestinations: this.setDestinations
+      setDestinations: this.setDestinations,
+      deleteRoute: this.deleteRoute,
+      updateRoute: this.updateRoute,
+      updateLocation: this.updateLocation
     }
 
     return (
@@ -123,6 +154,11 @@ class App extends Component {
             exact
             path='/create-route'
             component={CreateRoute}
+          />
+          <Route
+            exact
+            path='/edit-route/:route_id'
+            component={EditRoute}
           />
           <Route
             path={['/create-route/add-destinations/:route_id', '/create-route/add-destinations']}

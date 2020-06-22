@@ -13,6 +13,13 @@
     text-align: center;
 }
 
+.RoutePageButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 50%;
+}
+
 button {
     margin: 10px auto 10px auto;
 }
