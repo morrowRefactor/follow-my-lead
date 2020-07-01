@@ -13,7 +13,6 @@ class BrowseRoutes extends Component {
 
 
     render() {
-        const routesArray = this.context.routes;
         const routeFilter = this.props.location.pathname;
 
         const routeTypes = this.context.routes.filter(function(routes) {
@@ -27,7 +26,7 @@ class BrowseRoutes extends Component {
                 return routes.route_type_id === 3
             }
             else {
-                return routesArray
+                return this.context.routes
             }
         }) 
 

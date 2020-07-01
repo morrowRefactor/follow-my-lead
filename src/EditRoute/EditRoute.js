@@ -53,7 +53,7 @@ class EditRoute extends Component {
     handleClickCancel = () => {
         const routeID = this.props.match.params.route_id;
         this.props.history.push(`/routes/${parseInt(routeID)}`);
-    };
+    }
 
     handleRouteDelete = id => {
         this.context.deleteRoute(id);
@@ -87,7 +87,7 @@ class EditRoute extends Component {
         const routeTypes = this.context.routeTypes;
 
         return (
-            <section className="CreateRoute">
+            <section className="EditRoute">
                 <h3>Edit Route</h3>
                 <form 
                     className='CreateRouteForm'

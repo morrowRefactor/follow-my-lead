@@ -7,6 +7,7 @@ import RoutePage from '../RoutePage/RoutePage';
 import CreateRoute from '../CreateRoute/CreateRoute';
 import AddDestination from '../AddDestination/AddDestination';
 import EditRoute from '../EditRoute/EditRoute';
+import EditDestination from '../Edit Destination/EditDestination';
 import APIContext from '../APIContext';
 import DummyStore from '../dummy-store';
 import config from '../config';
@@ -28,12 +29,34 @@ class App extends Component {
   }
 
   updateState = () => {
-    this.setState({
-      routeTypes: DummyStore.routeTypes,
-      locations: DummyStore.locations,
-      routes: DummyStore.routes,
-      destinations: DummyStore.destinations
-    })
+    Promise.all([
+      fetch(`${config.API_ENDPOINT}/api/locations`),
+      fetch(`${config.API_ENDPOINT}/api/route-types`),
+      fetch(`${config.API_ENDPOINT}/api/routes`),
+      fetch(`${config.API_ENDPOINT}/api/destinations`)
+  ])
+      .then(([locRes, routeTypeRes, routesRes, destRes]) => {
+          if (!locRes.ok)
+              return locRes.json().then(e => Promise.reject(e));
+          if (!routeTypeRes.ok)
+              return routeTypeRes.json().then(e => Promise.reject(e));
+          if (!routesRes.ok)
+              return routesRes.json().then(e => Promise.reject(e));
+          if (!destRes.ok)
+              return destRes.json().then(e => Promise.reject(e));
+          return Promise.all([locRes.json(), routeTypeRes.json(), routesRes.json(), destRes.json()]);
+      })
+      .then(([locations, routeTypes, routes, destinations]) => {
+          this.setState({
+              locations: locations, 
+              routeTypes: routeTypes,
+              routes: routes,
+              destinations: destinations
+            });
+      })
+      .catch(error => {
+          console.error({error});
+      });
   }
 
   componentDidMount() {
@@ -59,7 +82,7 @@ class App extends Component {
     });
   }
 
-  addLocation = location => {
+  addLocation = (location) => {
     const newLocation = this.state.locations;
     newLocation.push(location);
     this.setState({
@@ -83,7 +106,7 @@ class App extends Component {
     })
   }
 
-  addressTransfer = addy => {
+  addyTransfer = addy => {
     this.setState({
       selectedAddress: addy
     })
@@ -131,11 +154,11 @@ class App extends Component {
       addRoute: this.addRoute,
       addLocation: this.addLocation,
       addDest: this.addDest,
-      addressTransfer: this.addressTransfer,
       setDestinations: this.setDestinations,
       deleteRoute: this.deleteRoute,
       updateRoute: this.updateRoute,
-      updateLocation: this.updateLocation
+      updateLocation: this.updateLocation,
+      addyTransfer: this.addyTransfer
     }
 
     return (
@@ -159,6 +182,11 @@ class App extends Component {
             exact
             path='/edit-route/:route_id'
             component={EditRoute}
+          />
+          <Route
+            exact
+            path='/edit-destination/:dest_id'
+            component={EditDestination}
           />
           <Route
             path={['/create-route/add-destinations/:route_id', '/create-route/add-destinations']}

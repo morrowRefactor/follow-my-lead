@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps";
-import APIContext from '../APIContext';
 import config from '../config';
+import APIContext from '../APIContext';
 import './SearchMap.css';
-
-
 
 class SearchMap extends Component {
     static contextType = APIContext;
 
-    constructor( props ){
-        super( props );
+    constructor(props) {
+        super(props);
         this.state = {
-         latitude: 40.748817,
-         longitude: -73.985428,
-         address: ''
+            addySearched: false,
+            latitude: 40.748817,
+            longitude: -73.985428
         }
     }
 
@@ -28,7 +26,7 @@ class SearchMap extends Component {
             this.setState({
                 latitude: response.results[0].geometry.location.lat,
                 longitude: response.results[0].geometry.location.lng,
-                address: searchVal
+                addySearched: true
             })
         })
         .catch(error => {
@@ -42,18 +40,24 @@ class SearchMap extends Component {
         this.updateCoordinates(addy);
     }
 
-    confirmAddress = () => {
-        this.context.addressTransfer(this.state);
+    toTitleCase = (addy) => {
+        return addy.replace(/\w\S*/g, function(addy){
+            return addy.charAt(0).toUpperCase() + addy.substr(1).toLowerCase();
+        });
     }
 
-    handleClickCancel = () => {
-        this.props.history.push('/')
-    };
+    confirmAddress = () => {
+        const addy = document.getElementById('searchAddress').value;
+        const cleanAddy = this.toTitleCase(addy)
+        const selectedAddy = {
+            address: cleanAddy,
+            lat: this.state.latitude,
+            lng: this.state.longitude
+        }
+        this.context.addyTransfer(selectedAddy)
+    }
 
     render(){
-        console.log(config)
-        console.log(`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${config.GOOGLE_API_KEY}`)
-
         const MapComponent = withScriptjs(withGoogleMap((props) => (
             <GoogleMap
                 defaultZoom={14} 
@@ -82,14 +86,16 @@ class SearchMap extends Component {
                         <input
                             type="text"
                             id="searchAddress"
-                            placeholder="42 Wallaby Way, Sydney"
+                            placeholder="20 W 34th St, New York, NY"
                         />
                     </div>
                     <button type='submit'>
                         Search Address
                     </button>
                     {' '}
-                    <button onClick={this.confirmAddress}>
+                    <button 
+                        onClick={this.confirmAddress}
+                    >
                         Use This Address
                     </button>
                 </form>

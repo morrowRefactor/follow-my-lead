@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps";
-import APIContext from '../APIContext';
+import config from '../config';
+import './DestinationMap.css';
+
 
 class DestinationMap extends Component {
-    static contextType = APIContext;
 
     render() {
         const MapComponent = withScriptjs(withGoogleMap((props) => (
@@ -20,17 +21,10 @@ class DestinationMap extends Component {
                 <MapComponent
                     center={this.props.destLat, this.props.destLng}
                     isMarkerShown
-                    googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyDFFvmBKhgEPjsrftIYez2j2ZrfyJ7xEeU"
+                    googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${config.GOOGLE_API_KEY}`}
                     loadingElement={<div style={{ height: `100%` }} />}
-                    containerElement={<div style={{ height: `300px`, position: 'relative', top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0}} />}
-                    mapElement={<div style={{ height: `100%`, position: 'relative',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0}} />}
+                    containerElement={<div style={{ height: `300px` }} />}
+                    mapElement={<div style={{ height: `100%` }} />}
                 />
             </section>
         )

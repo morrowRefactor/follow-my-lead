@@ -54,10 +54,11 @@ class RoutePage extends Component {
             <Destination
                 className='Destination'
                 key={dest.id}
+                destID={dest.id}
                 name={dest.destination}
                 content={dest.content}
-                destLat={dest.destLat}
-                destLng={dest.destLng}
+                destLat={Number(dest.dest_lat)}
+                destLng={Number(dest.dest_lng)}
                 seqNum={dest.sequence_num}
                 routeID={dest.route_id}
             />

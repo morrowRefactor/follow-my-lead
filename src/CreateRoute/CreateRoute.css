@@ -11,7 +11,8 @@ label {
     margin-top: 10px;
 }
 
-input {
+input,
+select {
     width: 90%;
 }
 
