@@ -15,7 +15,7 @@ export default React.createContext({
     addLocation: () => {},
     addDest: () => {},
     setDestinations: () => {},
-    deleteRoute: () => {},
+    handlePatchDelete: () => {},
     updateRoute: () => {},
     updateLocation: () => {},
     addyTransfer: () => {}

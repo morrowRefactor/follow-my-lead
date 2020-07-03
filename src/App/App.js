@@ -6,7 +6,7 @@ import BrowseRoutes from '../BrowseRoutes/BrowseRoutes';
 import RoutePage from '../RoutePage/RoutePage';
 import CreateRoute from '../CreateRoute/CreateRoute';
 import AddDestination from '../AddDestination/AddDestination';
-import EditRoute from '../EditRoute/EditRoute';
+import EditRouteTemp from '../EditRoute/EditRouteTemp';
 import EditDestination from '../Edit Destination/EditDestination';
 import APIContext from '../APIContext';
 import DummyStore from '../dummy-store';
@@ -130,13 +130,8 @@ class App extends Component {
     })
   }
 
-  deleteRoute = id => {
-    const newRoutes = this.state.routes.filter(obj => {
-      return obj.id !== id
-    });
-    this.setState({
-      routes: newRoutes
-    })
+  handlePatchDelete = () => {
+    this.updateState();
   }
 
   render() {
@@ -155,7 +150,7 @@ class App extends Component {
       addLocation: this.addLocation,
       addDest: this.addDest,
       setDestinations: this.setDestinations,
-      deleteRoute: this.deleteRoute,
+      handlePatchDelete: this.handlePatchDelete,
       updateRoute: this.updateRoute,
       updateLocation: this.updateLocation,
       addyTransfer: this.addyTransfer
@@ -181,7 +176,7 @@ class App extends Component {
           <Route
             exact
             path='/edit-route/:route_id'
-            component={EditRoute}
+            component={EditRouteTemp}
           />
           <Route
             exact

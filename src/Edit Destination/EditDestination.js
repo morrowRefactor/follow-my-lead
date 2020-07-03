@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import APIContext from '../APIContext';
+import config from '../config';
 import './EditDestination.css';
 
 class EditDestination extends Component {
@@ -55,9 +56,28 @@ class EditDestination extends Component {
         this.props.history.push(`/routes/${parseInt(routeID)}`);
     };
 
-    handleRouteDelete = id => {
-        this.context.deleteRoute(id);
-        this.props.history.push('/');
+    handleDeleteDest = (destID, routeID) => {
+        fetch(`${config.API_ENDPOINT}/api/destinations/${destID}`, {
+            method: 'DELETE',
+            body: JSON.stringify(destID),
+            headers: {
+              'content-type': 'application/json'
+            }
+          })
+            .then(res => {
+              if (!res.ok) {
+                return res.json().then(error => {
+                  throw error
+                })
+              }
+            })
+            .then(data => {
+              this.context.handleDelete();
+            })
+            .catch(error => {
+              this.setState({ error })
+        })
+        this.props.history.push(`/routes/${routeID}`);
     }
 
     render() {
@@ -65,16 +85,7 @@ class EditDestination extends Component {
         const destID = this.props.match.params.dest_id;
         for(let i = 0; i < this.context.destinations.length; i++) {
             if (this.context.destinations[i].id === parseInt(destID)) {
-                destToEdit = {
-                    id: this.context.destinations[i].id,
-                    destination: this.context.destinations[i].destination,
-                    routeID: this.context.destinations[i].route_id,
-                    seqNum: this.context.destinations[i].sequence_num,
-                    address: this.context.destinations[i].address,
-                    content: this.context.destinations[i].content,
-                    destLat: this.context.destinations[i].destLat,
-                    destLng: this.context.destinations[i].destLng
-                }
+                destToEdit = this.context.destinations[i];
             }
         }
 
@@ -90,14 +101,14 @@ class EditDestination extends Component {
                             type="text"
                             id="name"
                             required
-                            placeholder="A great place for local food!"
+                            defaultValue={destToEdit.destination}
                         />
                         <label htmlFor="description">Description</label>
                         <input
                             type="text"
                             id="description"
                             required
-                            placeholder="This place is known to everyone in town for their famous pastries."
+                            defaultValue={destToEdit.content}
                         />
                         <label htmlFor="address">Address</label>
                         <p className='descText'>Need help finding an address?  Search the map below to pinpoint your destination.</p>
@@ -105,8 +116,7 @@ class EditDestination extends Component {
                             type="text"
                             id="address"
                             required
-                            value={this.context.selectedAddress.address}
-                            placeholder="42 Wallaby Way, Sydney"
+                            defaultValue={destToEdit.dest_address}
                         />
                         <label htmlFor="sequence">Sequence Number</label>
                         <p className='descText'>Which stop is this along your route? First? Second?</p>
@@ -114,15 +124,15 @@ class EditDestination extends Component {
                             type="number"
                             id="sequence"
                             required
-                            placeholder="1"
+                            defaultValue={destToEdit.sequence_num}
                         />
                     </div>
                     <button type='submit'>
-                        Add Destination
+                        Save Changes
                     </button>
                     {' '}
-                    <button type='button' onClick={this.handleFinish}>
-                        Finish Route
+                    <button type='button' onClick={() => this.handleDeleteDest(parseInt(this.props.match.params.dest_id), destToEdit.route_id)}>
+                        Delete Destination
                     </button>
                     {' '}
                     <button type='button' onClick={this.handleClickCancel}>

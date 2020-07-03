@@ -14,6 +14,7 @@ class BrowseRoutes extends Component {
 
     render() {
         const routeFilter = this.props.location.pathname;
+        const allRoutes = this.context.routes;
 
         const routeTypes = this.context.routes.filter(function(routes) {
             if(routeFilter.includes('tourist')) {
@@ -26,7 +27,7 @@ class BrowseRoutes extends Component {
                 return routes.route_type_id === 3
             }
             else {
-                return this.context.routes
+                return allRoutes
             }
         }) 
 

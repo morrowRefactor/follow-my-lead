@@ -19,18 +19,13 @@ class EditRoute extends Component {
             routeSumm: { value: '', touched: false },
             city: { value: '', touched: false },
             state_province: { value: '', touched: false },
-            country: { id: '', value: '', touched: false }
+            country: { value: '', touched: false }
         }
     }
 
     updateName(name) {
         console.log('updatename')
         this.setState({name: {value: name, touched: true}});
-    }
-
-    updateRouteType(routeType) {
-        console.log('updateroutetype')
-        this.setState({routeType: {value: routeType, touched: true}});
     }
 
     updateRouteSumm(routeSumm) {
@@ -69,55 +64,125 @@ class EditRoute extends Component {
         }
     }
 
-    validateInput = e => {
+    handleSubmit = e => {
         e.preventDefault();
+        //check and set values for the route object to update
         const routeID = this.props.match.params.route_id;
-        const routeObj = this.context.routes.filter(obj => {
-            return obj.id === parseInt(routeID)
-        })
-        const routeTypeObj = this.context.routeTypes.filter(obj => {
-            return obj.type === document.getElementById('routeType').value
-        })
-        const input = {
-            routeID: parseInt(routeID),
+        let routeTypeID = 0;
+        for(let i = 0; i < this.context.routeTypes.length; i++) {
+            if(this.context.routeTypes[i].route_type === document.getElementById('routeType').value) {
+                routeTypeID = this.context.routeTypes[i].id;
+            }
+        }
+
+        const route = {
             route_name: this.state.name.value,
-            route_type_id: routeTypeObj[0].id,
-            route_summ: this.state.routeSumm.value,
-            city: this.state.city.value,
-            state_province: this.state.state_province.value,
-            country: this.state.country.value
+            route_type_id: routeTypeID,
+            route_summ: this.state.routeSumm.value
+        }
+
+        //check and set values for the location object to update
+        const countryObj = ICountry.filter(obj => {
+            return obj.id === this.state.country.value
+        })
+
+        const stateObj = IState.filter(obj => {
+            return obj.id === this.state.state_province.value
+        })
+
+        const cityObj = ICity.filter(obj => {
+            return obj.id === this.state.city.value
+        })
+
+        const uniqueLocString = `${cityObj[0].name}` + '-' + `${stateObj[0].name}` + '-' + `${countryObj[0].name}`;
+        const uniqueLocClean = uniqueLocString.replace(/\s/g , "-");
+
+        const loc = {
+            city: cityObj[0].name,
+            state_province: stateObj[0].name,
+            country: countryObj[0].name,
+            unique_loc: uniqueLocClean
         }
 
         if(this.state.country.touched === true || this.state.state_province.touched === true || this.state.city.touched === true) {
-            console.log('location edited')
+            let newLocation = true;
+            for(let i = 0; i < this.context.locations.length; i++) {
+                if(this.context.locations[i].unique_loc === uniqueLocClean) {
+                    newLocation = false;
+                    route.location_id = this.context.locations[i].id;
+                    this.handleUpdateRoute(route);
+                }
+            }
+            if(newLocation === true) {
+                this.handleUpdateLocation(loc, route);
+            }
         }
         else {
-            console.log('location not edited')
+            let locID = 0;
+            for(let i = 0; i < this.context.routes.length; i++) {
+                if(this.context.routes[i].id === parseInt(this.props.match.params.route_id)) {
+                    locID = this.context.routes[i].location_id;
+                }
+            }
+            route.location_id = locID;
+            this.handleUpdateRoute(route);
         }
     };
 
-    handleSubmit(input) {
-        const newRoute = {
-            id: input.routeID,
-            route_name: input.name,
-            route_summ: input.routeSumm,
-            route_type_id: input.routeType,
-            route_location: input.locID
+    handleUpdateLocation(loc, route) {
+        fetch(`${config.API_ENDPOINT}/api/locations`, {
+          method: 'POST',
+          body: JSON.stringify(loc),
+          headers: {
+            'content-type': 'application/json'
+          }
+        })
+          .then(res => {
+            if (!res.ok) {
+              return res.json().then(error => {
+                throw error
+              })
+            }
+            return res.json()
+          })
+          .then(data => {
+            this.context.addLocation(data)
+            this.handleUpdateRoute(route, data.id)
+          })
+          .catch(error => {
+            this.setState({ error })
+        })
+    }
+
+    handleUpdateRoute = (route, locID) => {
+        if(locID) {
+            route.location_id = locID;
         }
-        const newLocation = {
-            id: input.locID,
-            city: input.city,
-            state_province: input.province,
-            country: input.country
-        }
-        
-        this.context.updateLocation(newLocation);
-        this.context.updateRoute(newRoute);
-        this.props.history.push('/');
+
+        fetch(`${config.API_ENDPOINT}/api/routes/${this.props.match.params.route_id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(route),
+            headers: {
+              'content-type': 'application/json'
+            }
+          })
+            .then(res => {
+              if (!res.ok) {
+                return res.json().then(error => {
+                  throw error
+                })
+              }
+            })
+            .then(data => {
+              this.context.handlePatchDelete();
+            })
+            .catch(error => {
+              this.setState({ error })
+            })
+        this.props.history.push(`/routes/${this.props.match.params.route_id}`);
     }
 
     handleClickCancel = () => {
-        console.log('handlecancel')
         const routeID = this.props.match.params.route_id;
         this.props.history.push(`/routes/${parseInt(routeID)}`);
     }
@@ -139,7 +204,7 @@ class EditRoute extends Component {
               }
             })
             .then(data => {
-              this.context.handleDelete();
+              this.context.handlePatchDelete();
             })
             .catch(error => {
               this.setState({ error })
@@ -150,12 +215,6 @@ class EditRoute extends Component {
     render() {
         const nameError = this.validateName();
         const routeSummError = this.validateRouteSumm();
-        const stateArray = IState.filter(obj => {
-            return obj.country_id === this.state.country.value
-        });
-        const cityArray = ICity.filter(obj => {
-            return obj.state_id === this.state.state_province.value
-        });
 
         let routeToEdit = {};
         for(let i = 0; i < this.context.routes.length; i++) {
@@ -163,13 +222,14 @@ class EditRoute extends Component {
                 routeToEdit = this.context.routes[i];
             }
         }
+
         let routeLocation = {};
         for(let i = 0; i < this.context.locations.length; i++) {
             if(this.context.locations[i].id === routeToEdit.location_id) {
                 routeLocation = this.context.locations[i];
             }
         }
-        
+
         let routeType = '';
         for(let i = 0; i < this.context.routeTypes.length; i++) {
             if(this.context.routeTypes[i].id === routeToEdit.route_type_id) {
@@ -177,12 +237,20 @@ class EditRoute extends Component {
             }
         }
 
+        const stateArray = IState.filter(obj => {
+            return obj.country_id === this.state.country.value
+        });
+
+        const cityArray = ICity.filter(obj => {
+            return obj.state_id === this.state.state_province.value
+        });
+
         return (
             <section className="EditRoute">
                 <h3>Edit Route</h3>
                 <form 
                     className='CreateRouteForm'
-                    onSubmit={() => this.validateInput()}
+                    onSubmit={e => this.handleSubmit(e)}
                 >
                     <div>
                         <label htmlFor='routeName'>
@@ -207,12 +275,12 @@ class EditRoute extends Component {
                             id='routeType'
                             required
                         >
+                            <option>Select</option>
                             {this.context.routeTypes.map(type =>
                                 <option 
                                     value={type.route_type} 
-                                    key={type.id} 
+                                    key={type.id}
                                     defaultValue={routeType}
-                                    onChange={e => this.updateRouteType(e.target.value)}
                                 >
                                     {type.route_type}
                                 </option>
@@ -232,17 +300,10 @@ class EditRoute extends Component {
                         {this.state.routeSumm.touched && (
                             <ValidationError message={routeSummError} />
                         )}
-                        <div className='CurrentLocation'>
-                            <h4>Current Route Location</h4>
-                            City: {routeLocation.city}<br/>
-                            State/Province: {routeLocation.state_province}<br/>
-                            Country: {routeLocation.country}<br/>
-                        </div>
-                        <div className={this.state.locForm}>
-                            <label htmlFor='country'>
-                                Country
-                            </label>
-                            <select
+                        <label htmlFor='country'>
+                            Country
+                        </label>
+                        <select
                                 name='country'
                                 id='country'
                                 defaultValue={routeLocation.country}
@@ -255,10 +316,10 @@ class EditRoute extends Component {
                                     </option>
                                 )}
                             </select>
-                            <label htmlFor='state_province'>
-                                State/Province
-                            </label>
-                            <select
+                        <label htmlFor='state_province'>
+                            State/Province
+                        </label>
+                        <select
                                 name='state_province'
                                 id='state_province'
                                 disabled={!this.state.country.touched}
@@ -272,10 +333,10 @@ class EditRoute extends Component {
                                     </option>
                                 )}
                             </select>
-                            <label htmlFor='city'>
-                                City
-                            </label>
-                            <select
+                        <label htmlFor='city'>
+                            City
+                        </label>
+                        <select
                                 name='city'
                                 id='city'
                                 disabled={!this.state.state_province.touched}
@@ -289,7 +350,6 @@ class EditRoute extends Component {
                                     </option>
                                 )}
                             </select>
-                        </div>
                     </div>
                     <div className='CreateRouteButtons'>
                         <button type='submit'>
