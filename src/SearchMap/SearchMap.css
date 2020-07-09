@@ -1,3 +1,11 @@
 .SearchMap {
     width: 100%;
+    padding: 20px;
+    background-color: rgb(214, 213, 213);
+    margin-bottom: 20px;
+}
+
+.searchText {
+    font-size: 12px;
+    margin: 3px auto 3px auto;
 }

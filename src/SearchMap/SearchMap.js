@@ -12,7 +12,9 @@ class SearchMap extends Component {
         this.state = {
             addySearched: false,
             latitude: 40.748817,
-            longitude: -73.985428
+            longitude: -73.985428,
+            place_id: '',
+            formatted_address: ''
         }
     }
 
@@ -26,6 +28,8 @@ class SearchMap extends Component {
             this.setState({
                 latitude: response.results[0].geometry.location.lat,
                 longitude: response.results[0].geometry.location.lng,
+                place_id: response.results[0].place_id,
+                formatted_address: response.results[0].formatted_address,
                 addySearched: true
             })
         })
@@ -52,15 +56,22 @@ class SearchMap extends Component {
         const selectedAddy = {
             address: cleanAddy,
             lat: this.state.latitude,
-            lng: this.state.longitude
+            lng: this.state.longitude,
+            place_id: this.state.place_id,
+            formatted_address: this.state.formatted_address
         }
-        this.context.addyTransfer(selectedAddy)
+        if(this.props.value.location.pathname.includes('create-route')) {
+            this.context.addyTransfer(selectedAddy);
+        }
+        if(this.props.value.location.pathname.includes('edit-destination')) {
+            this.context.addyTransfer2(selectedAddy);
+        }
     }
 
     render(){
         const MapComponent = withScriptjs(withGoogleMap((props) => (
             <GoogleMap
-                defaultZoom={14} 
+                defaultZoom={13} 
                 center={{ lat: this.state.latitude, lng: this.state.longitude }}
             >
                 {<Marker shape="rectangle" position={{ lat: this.state.latitude, lng: this.state.longitude }} />}
@@ -69,20 +80,13 @@ class SearchMap extends Component {
 
         return (
             <div className='SearchMap'>
-                <MapComponent
-                    center={this.state.latitude, this.state.longitude}
-                    isMarkerShown
-                    googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${config.GOOGLE_API_KEY}`}
-                    loadingElement={<div style={{ height: `100%` }} />}
-                    containerElement={<div style={{ height: `300px` }} />}
-                    mapElement={<div style={{ height: `100%` }} />}
-                />
                 <form 
                     className='AddressForm'
                     onSubmit={this.setAddress}
                 >
                     <div className="form-group">
                         <label htmlFor="Address">Address</label>
+                        <p className='searchText'>Search for an exact address ("20 W 34th St, New York, NY") OR by keyword ("Empire State Building NY").</p>
                         <input
                             type="text"
                             id="searchAddress"
@@ -95,10 +99,19 @@ class SearchMap extends Component {
                     {' '}
                     <button 
                         onClick={this.confirmAddress}
+                        disabled={this.state.addySearched === false}
                     >
-                        Use This Address
+                        Confirm Address
                     </button>
                 </form>
+                <MapComponent
+                    center={this.state.latitude, this.state.longitude}
+                    isMarkerShown
+                    googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${config.GOOGLE_API_KEY}`}
+                    loadingElement={<div style={{ height: `100%` }} />}
+                    containerElement={<div style={{ height: `300px` }} />}
+                    mapElement={<div style={{ height: `100%` }} />}
+                />
             </div>
         )
     }

@@ -6,8 +6,8 @@ import BrowseRoutes from '../BrowseRoutes/BrowseRoutes';
 import RoutePage from '../RoutePage/RoutePage';
 import CreateRoute from '../CreateRoute/CreateRoute';
 import AddDestination from '../AddDestination/AddDestination';
-import EditRouteTemp from '../EditRoute/EditRouteTemp';
-import EditDestination from '../Edit Destination/EditDestination';
+import EditRoute from '../EditRoute/EditRoute';
+import EditDestination from '../EditDestination/EditDestination';
 import APIContext from '../APIContext';
 import DummyStore from '../dummy-store';
 import config from '../config';
@@ -22,6 +22,7 @@ class App extends Component {
       routes: [],
       destinations: [],
       selectedAddress: {},
+      selectedAddress2: {},
       selectedDestLat: 1,
       selectedDestLng: 1,
       navbar: 'hidden'
@@ -112,6 +113,12 @@ class App extends Component {
     })
   }
 
+  addyTransfer2 = addy => {
+    this.setState({
+      selectedAddress2: addy
+    })
+  }
+
   updateRoute = route => {
     const updateRoutes = this.state.routes.filter(obj => {
       return obj.id !== route.id
@@ -141,8 +148,7 @@ class App extends Component {
       routes: this.state.routes,
       destinations: this.state.destinations,
       selectedAddress: this.state.selectedAddress,
-      selectedDestLat: this.state.selectedDestLat,
-      selectedDestLng: this.context.selectedDestLng,
+      selectedAddress2: this.state.selectedAddress2,
       navbar: this.state.navbar,
       toggleNav: this.toggleNav,
       setRoutes: this.setRoutes,
@@ -153,7 +159,8 @@ class App extends Component {
       handlePatchDelete: this.handlePatchDelete,
       updateRoute: this.updateRoute,
       updateLocation: this.updateLocation,
-      addyTransfer: this.addyTransfer
+      addyTransfer: this.addyTransfer,
+      addyTransfer2: this.addyTransfer2
     }
 
     return (
@@ -176,7 +183,7 @@ class App extends Component {
           <Route
             exact
             path='/edit-route/:route_id'
-            component={EditRouteTemp}
+            component={EditRoute}
           />
           <Route
             exact

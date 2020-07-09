@@ -8,13 +8,9 @@
 
 h3 {
     text-align: center;
+    margin-bottom: 20px;
 }
 
-.DesImage {
-    display: inline-block;
-    width: 70%;
-    height: 100px;
-    line-height: 100px;
-    border: solid 1px black;
-    text-align: center;
+.DestImage {
+    width: 90%;
 }

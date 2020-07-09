@@ -1,6 +1,6 @@
 .DestinationForm {
     width: 100%;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .AddressForm {
@@ -14,8 +14,35 @@
 .descText {
     font-size: 12px;
     margin: 0px;
+    color: red;
+}
+
+.seqText {
+    font-size: 12px;
+    margin: 0px;
+}
+
+.addyText {
+    margin: 5px auto 5px auto;
+    font-size: 14px;
 }
 
 #sequence {
     width: 55px;
+}
+
+.hidden {
+    display: none;
+}
+
+.FinishRouteButton {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    background-color: rgb(218, 218, 218);
+    padding: 0px 10px 0px 10px;
+}
+
+.FinishRouteText {
+    font-size: 14px;
+    margin: 3px auto 3px auto;
 }

@@ -12,10 +12,6 @@ h2 {
     text-decoration: none;
 }
 
-.Image {
-    display: inline-block;
-    border: solid 1px black;
+.HomePageImage {
     width: 70%;
-    height: 50px;
-    line-height: 50px;
 }

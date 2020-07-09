@@ -9,7 +9,7 @@ class DestinationMap extends Component {
     render() {
         const MapComponent = withScriptjs(withGoogleMap((props) => (
             <GoogleMap
-                defaultZoom={14} 
+                defaultZoom={16} 
                 center={{ lat: this.props.destLat, lng: this.props.destLng }}
             >
                 {<Marker shape="rectangle" position={{ lat: this.props.destLat, lng: this.props.destLng }} />}

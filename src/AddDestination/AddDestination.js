@@ -11,7 +11,9 @@ class AddDestination extends Component {
                 <DestinationForm 
                     route_id={this.props.match.params.route_id}
                 />
-                <SearchMap /> 
+                <SearchMap 
+                    value={this.props}    
+                /> 
             </div>
         )
     }

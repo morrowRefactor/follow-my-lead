@@ -66,7 +66,9 @@ class DestinationForm extends Component {
             sequence_num: parseInt(this.state.sequence_num.value),
             route_id: parseInt(routeID),
             dest_lat: this.context.selectedAddress.lat,
-            dest_lng: this.context.selectedAddress.lng
+            dest_lng: this.context.selectedAddress.lng,
+            place_id: this.context.selectedAddress.place_id,
+            formatted_address: this.context.selectedAddress.formatted_address
         }
 
        this.handleSubmit(input);
@@ -99,7 +101,7 @@ class DestinationForm extends Component {
     };
 
     handleFinish = () => {
-        const routeID = this.props.route_id;
+        const routeID = parseInt(this.props.route_id);
         this.props.history.push(`/routes/${routeID}`);
     };
 
@@ -111,6 +113,17 @@ class DestinationForm extends Component {
         const nameError = this.validateName();
         const descError = this.validateDesc();
         const seqError = this.validateSeqNum();
+
+        const numDest = this.context.destinations.filter(obj => {
+            return obj.route_id === parseInt(this.props.route_id)
+        })
+        let finishClass = '';
+        if(numDest.length < 1) {
+            finishClass = 'hidden'
+        }
+        if(numDest.length >= 1) {
+            finishClass = 'FinishRouteButton'
+        }
 
         return( 
             <div className='DestinationForm'>
@@ -141,15 +154,6 @@ class DestinationForm extends Component {
                         {this.state.description.touched && (
                             <ValidationError message={descError} />
                         )}
-                        <label htmlFor="address">Address</label>
-                        <p className='descText'>Use the map below to pinpoint your destination.</p>
-                        <input
-                            type="text"
-                            id="address"
-                            required
-                            defaultValue={this.context.selectedAddress.address}
-                            readOnly
-                        />
                         <label htmlFor="sequence">Sequence Number</label>
                         <p className='seqText'>Which stop is this along your route? First? Second?</p>
                         <input
@@ -157,25 +161,30 @@ class DestinationForm extends Component {
                             id="sequence"
                             required
                             min="1"
-                            placeholder="1"
+                            placeholder="0"
                             onChange={e => this.updateSeqNum(e.target.value)}
                         />
                         {this.state.sequence_num.touched && (
                             <ValidationError message={seqError} />
                         )}
+                        <label htmlFor="address">Address</label>
+                        <p className='descText'>Use the map below to pinpoint your destination.</p>
+                        <p className='addyText'>Current Selected Address:<br/> {this.context.selectedAddress.address || `None selected`}</p>
                     </div>
                     <button type='submit'>
                         Add Destination
-                    </button>
-                    {' '}
-                    <button type='button' onClick={this.handleFinish}>
-                        Finish Route
                     </button>
                     {' '}
                     <button type='button' onClick={this.handleClickCancel}>
                         Cancel
                     </button>
                 </form>
+                <div className={finishClass}>
+                    <button type='button' onClick={this.handleFinish}>
+                        Finish Route
+                    </button>
+                    <p className='FinishRouteText'>I'm done adding destinations.  Let's see my route!</p>
+                </div>
             </div>
         )
     }

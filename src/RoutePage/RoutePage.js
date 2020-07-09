@@ -7,8 +7,12 @@ import './RoutePage.css';
 class RoutePage extends Component {
     static contextType = APIContext;
 
-    handleEditRoute =id => {
+    handleEditRoute = id => {
         this.props.history.push(`/edit-route/${id}`);
+    }
+
+    handleAddDest = id => {
+        this.props.history.push(`/create-route/add-destinations/${id}`);
     }
 
     render() {
@@ -31,7 +35,7 @@ class RoutePage extends Component {
                 route = {
                     name: this.context.routes[i].route_name,
                     routeType: this.context.routes[i].route_type_id,
-                    location: this.context.routes[i].route_location
+                    location: this.context.routes[i].location_id
                 }
             }
         }
@@ -50,6 +54,10 @@ class RoutePage extends Component {
                 return dest.route_id === parseInt(routeID)
         })
 
+        routeDest.sort((a, b) => {
+            return a.sequence_num - b.sequence_num;
+        })
+
         const destinations = routeDest.map(dest =>
             <Destination
                 className='Destination'
@@ -57,6 +65,8 @@ class RoutePage extends Component {
                 destID={dest.id}
                 name={dest.destination}
                 content={dest.content}
+                placeID={dest.place_id}
+                formAddress={dest.formatted_address}
                 destLat={Number(dest.dest_lat)}
                 destLng={Number(dest.dest_lng)}
                 seqNum={dest.sequence_num}
@@ -64,15 +74,26 @@ class RoutePage extends Component {
             />
         )
 
+        let routeImage = '';
+        if(route.routeType === 1) {
+            routeImage = 'https://user-images.githubusercontent.com/58446465/87073383-d5c3da80-c20c-11ea-981a-1785988fcbeb.jpg'
+        }
+        if(route.routeType === 2) {
+            routeImage = 'https://user-images.githubusercontent.com/58446465/87073369-d0669000-c20c-11ea-8e75-5f48a0f9aea3.jpg'
+        }
+        else {
+            routeImage = 'https://user-images.githubusercontent.com/58446465/87073376-d3618080-c20c-11ea-9f06-1a89131e441c.jpg'
+        }
+
         return (
             <section className="RoutePage">
                 <h3>{route.name}</h3>
                 <span>{location.city}, {location.state_province}</span>
-                <div className='Image'>[image]</div>
+                <img className='RoutePageImage' src={routeImage} />
                 <div className='RoutePageButtons'>
-                    <button>Start Route</button>
-                    {' '}
                     <button onClick={() => this.handleEditRoute(parseInt(routeID))}>Edit Route</button>
+                    {' '}
+                    <button onClick={() => this.handleAddDest(parseInt(routeID))}>Add Destination</button>
                 </div>
                 <div className='DestinationList'>
                    {destinations}
