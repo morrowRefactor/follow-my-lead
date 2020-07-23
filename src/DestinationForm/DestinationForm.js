@@ -18,7 +18,6 @@ class DestinationForm extends Component {
         }
     }
 
-    //Manage form field changes and validation
     updateName(name) {
         this.setState({name: {value: name, touched: true}});
     }
@@ -55,7 +54,6 @@ class DestinationForm extends Component {
         }
     }
 
-    //Manage form submission to add destination
     validateInput = e => {
         e.preventDefault();
         const routeID = this.props.route_id;
@@ -97,6 +95,7 @@ class DestinationForm extends Component {
               this.setState({ error })
             })
         document.getElementById('destination-form').reset();
+        this.setState({sequence_num: {value: 0, touched: true}});
         this.props.history.push(`/create-route/add-destinations/${newDest.route_id}`);
     };
 
@@ -114,6 +113,10 @@ class DestinationForm extends Component {
         const descError = this.validateDesc();
         const seqError = this.validateSeqNum();
 
+        const routeName = this.context.routes.filter(obj => {
+            return obj.id === parseInt(this.props.route_id)
+        })
+
         const numDest = this.context.destinations.filter(obj => {
             return obj.route_id === parseInt(this.props.route_id)
         })
@@ -122,11 +125,13 @@ class DestinationForm extends Component {
             finishClass = 'hidden'
         }
         if(numDest.length >= 1) {
-            finishClass = 'FinishRouteButton'
+            finishClass = 'addDestFormFinishRoute'
         }
 
         return( 
-            <div className='DestinationForm'>
+            <div className='AddDestinationForm featureBox'>
+                <h3 className='addDestFormTitle'>Add Destinations to Your Route</h3>
+                <h3 className='addDestFormRouteTitle'>{routeName[0].route_name}</h3>
                 <form
                     id='destination-form'
                     onSubmit={this.validateInput}
@@ -144,7 +149,7 @@ class DestinationForm extends Component {
                             <ValidationError message={nameError} />
                         )}
                         <label htmlFor="description">Description</label>
-                        <input
+                        <textarea
                             type="text"
                             id="description"
                             defaultValue="This place is known to everyone in town for their famous pastries."
@@ -168,22 +173,27 @@ class DestinationForm extends Component {
                             <ValidationError message={seqError} />
                         )}
                         <label htmlFor="address">Address</label>
-                        <p className='descText'>Use the map below to pinpoint your destination.</p>
-                        <p className='addyText'>Current Selected Address:<br/> {this.context.selectedAddress.address || `None selected`}</p>
+                        <p className='addDestFormDescText'>Use the map below to pinpoint your destination.</p>
+                        <p className='addDestFormAddyText'>Current Selected Address:<br/> {this.context.selectedAddress.address || `None selected`}</p>
                     </div>
-                    <button type='submit'>
-                        Add Destination
-                    </button>
-                    {' '}
-                    <button type='button' onClick={this.handleClickCancel}>
-                        Cancel
-                    </button>
+                    <div className='AddDestinationForm_buttons'>
+                        <button 
+                            type='submit'
+                            disabled={!this.context.selectedAddress.formatted_address}
+                        >
+                            Add Destination
+                        </button>
+                        {' '}
+                        <button type='button' onClick={this.handleClickCancel}>
+                            Cancel
+                        </button>
+                    </div>
                 </form>
                 <div className={finishClass}>
-                    <button type='button' onClick={this.handleFinish}>
+                    <button type='button' onClick={this.handleFinish} className='addDestFormFinishButton'>
                         Finish Route
                     </button>
-                    <p className='FinishRouteText'>I'm done adding destinations.  Let's see my route!</p>
+                    <p className='addDestFormFinishRouteText'>I'm done adding destinations.  Let's see my route!</p>
                 </div>
             </div>
         )

@@ -38,21 +38,24 @@ class BrowseRoutes extends Component {
                 routeID={route.id}
                 routeName={route.route_name}
                 routeSumm={route.route_summ}
-                locationID={route.route_location}
+                locationID={route.location_id}
                 routeType={route.route_type_id}
             />
         );
 
         return (
             <section className="BrowseRoutes">
-                <h2>Browse categories to find routes suited to your interests</h2>
-                <div className='Filters'>
-                    <button onClick={() => this.handleFilter()}>All</button>
-                    <button onClick={() => this.handleFilter('tourist')}>Tourist Guides</button>
-                    <button onClick={() => this.handleFilter('historic')}>Historical</button>
-                    <button onClick={() => this.handleFilter('personal')}>Personal</button>
-                </div>
-                <div className='Routes'>
+                <section className='BrowseRoutes_nav'>
+                    <h2 className='browseRoutesTitle'>Browse routes created by fellow adventurers and find truly unique experiences</h2>
+                    <h3 className='browseRoutesSubTitle'>Flip through the full scope of available routes or sort by a category that suites your interest.</h3>
+                    <div className='BrowseRoutes_filters'>
+                        <button className='browseRouteButton' onClick={() => this.handleFilter()}>All</button>
+                        <button className='browseRouteButton' onClick={() => this.handleFilter('tourist')}>Tourist</button>
+                        <button className='browseRouteButton' onClick={() => this.handleFilter('historic')}>Historic</button>
+                        <button className='browseRouteButton' onClick={() => this.handleFilter('personal')}>Personal</button>
+                    </div>
+                </section>
+                <div className='BrowseRoutes_routes'>
                    {routes} 
                 </div>
             </section>

@@ -1,5 +1,11 @@
 .EditDestination {
     width:90%;
-    margin-right: auto;
-    margin-left: auto;
+    margin: 0px auto 10px auto;
+}
+
+/*tablet and desktop adjustments*/
+@media (min-width: 600px) {
+    .EditDestination {
+        width: 60%;
+    }
 }

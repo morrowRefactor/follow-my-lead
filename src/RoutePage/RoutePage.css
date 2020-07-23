@@ -5,27 +5,81 @@
     align-items: center;
 }
 
-.RoutePageImage {
+.RoutePage_routeOverview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: rgb(230, 230, 230);
+    border-radius: 3px;
+    padding-top: 20px;
+}
+
+.routePageImage {
     width: 90%;
 }
 
-.RoutePageButtons {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    width: 80%;
+.routePageTitle {
+    font-size: 22px;
+    margin: 10px auto 0px auto;
 }
 
-button {
-    margin: 10px auto 10px auto;
+.routePageEditLinks {
+    font-size: 12px;
+    text-align: center;
+    margin: 0px auto 0px auto;
 }
 
-.DestinationList {
+.routePageEditButton {
+    font-size: 12px;
+    border: none;
+    background-color: rgb(230, 230, 230);
+    padding: 0px;
+}
+
+.routePageEditButton:hover {
+    cursor: pointer;
+}
+
+.routePagePerts {
+    font-size: 13px;
+    padding-top: 10px;
+    margin-bottom: 0px;
+    border-top: 0.5px solid rgb(199, 199, 199);
+    width: 90%;
+}
+
+.routePageContent {
+    padding: 0px 20px 10px 20px;
+    border-bottom: 0.5px solid rgb(199, 199, 199);
+    width: 90%;
+}
+
+.RoutePage_destinationList {
     width: 100%;
 }
 
-.Destination {
-    width: 100%;
-    background-color: rgb(211, 210, 210);
-    margin-bottom: 10px;
+/*desktop adjustments*/
+@media (min-width: 900px) {
+    .RoutePage {
+        width: 90%;
+    }
+
+    .RoutePage_routeOverview {
+        width: 35%;
+        position: fixed;
+        top: 70px;
+        left: 5%;
+        background-color: white;
+    }
+
+    .routePageEditButton {
+        background-color: white;
+    }
+
+    .RoutePage_destinationList {
+        margin-right: 0px;
+        margin-left: auto;
+        width: 60%;
+    }
 }

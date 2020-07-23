@@ -20,7 +20,7 @@ class EditRoute extends Component {
             city: { value: '', touched: false },
             state_province: { value: '', touched: false },
             country: { value: '', touched: false },
-            editLocation: ''
+            locationForm: 'hidden'
         }
     }
 
@@ -60,8 +60,6 @@ class EditRoute extends Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        //check and set values for the route object to update
-        const routeID = this.props.match.params.route_id;
         let routeTypeID = 0;
         for(let i = 0; i < this.context.routeTypes.length; i++) {
             if(this.context.routeTypes[i].route_type === document.getElementById('routeType').value) {
@@ -75,30 +73,29 @@ class EditRoute extends Component {
             route_summ: this.state.routeSumm.value
         }
 
-        //check and set values for the location object to update
-        const countryObj = ICountry.filter(obj => {
-            return obj.id === this.state.country.value
-        })
-
-        const stateObj = IState.filter(obj => {
-            return obj.id === this.state.state_province.value
-        })
-
-        const cityObj = ICity.filter(obj => {
-            return obj.id === this.state.city.value
-        })
-
-        const uniqueLocString = `${cityObj[0].name}` + '-' + `${stateObj[0].name}` + '-' + `${countryObj[0].name}`;
-        const uniqueLocClean = uniqueLocString.replace(/\s/g , "-");
-
-        const loc = {
-            city: cityObj[0].name,
-            state_province: stateObj[0].name,
-            country: countryObj[0].name,
-            unique_loc: uniqueLocClean
-        }
-
         if(this.state.country.touched === true || this.state.state_province.touched === true || this.state.city.touched === true) {
+            const countryObj = ICountry.filter(obj => {
+                return obj.id === this.state.country.value
+            })
+    
+            const stateObj = IState.filter(obj => {
+                return obj.id === this.state.state_province.value
+            })
+    
+            const cityObj = ICity.filter(obj => {
+                return obj.id === this.state.city.value
+            })
+    
+            const uniqueLocString = `${cityObj[0].name}-${stateObj[0].name}-${countryObj[0].name}`;
+            const uniqueLocClean = uniqueLocString.replace(/\s/g , "-");
+    
+            const loc = {
+                city: cityObj[0].name,
+                state_province: stateObj[0].name,
+                country: countryObj[0].name,
+                unique_loc: uniqueLocClean
+            }
+
             let newLocation = true;
             for(let i = 0; i < this.context.locations.length; i++) {
                 if(this.context.locations[i].unique_loc === uniqueLocClean) {
@@ -149,8 +146,21 @@ class EditRoute extends Component {
     }
 
     handleUpdateRoute = (route, locID) => {
+        const currRouteVals = this.context.routes.filter(obj => {
+            return obj.id === parseInt(this.props.match.params.route_id)
+        })
+        
         if(locID) {
             route.location_id = locID;
+        }
+        if(route.route_name.length < 1) {
+            route.route_name = currRouteVals[0].route_name
+        }
+        if(route.route_summ.length < 1) {
+            route.route_summ = currRouteVals[0].route_summ
+        }
+        if(route.route_type_id === 0) {
+            route.route_type_id = currRouteVals[0].route_type_id
         }
 
         fetch(`${config.API_ENDPOINT}/api/routes/${this.props.match.params.route_id}`, {
@@ -205,10 +215,10 @@ class EditRoute extends Component {
         this.props.history.push('/browse-routes');
     }
 
-    handleShowFormLoc() {
-        console.log('handleshowformloc')
+    handleShowLocForm = () => {
+        const css = (this.state.locationForm === 'hidden') ? 'EditRoute_locationForm' : 'hidden';
         this.setState({
-            editLocation: 'EditRouteLocation'
+            locationForm: css
         })
     }
 
@@ -243,13 +253,14 @@ class EditRoute extends Component {
 
         const cityArray = ICity.filter(obj => {
             return obj.state_id === this.state.state_province.value
-        });
+        }); 
 
         return (
-            <section className="EditRoute">
-                <h3>Edit Route</h3>
+            <section className="EditRoute featureBox">
+                <h3 className='editRouteTitle'>Edit Route</h3>
+                <p className='editRouteSubTitle'>{routeToEdit.route_name}</p>
                 <form 
-                    className='CreateRouteForm'
+                    className='EditRoute_editRouteForm'
                 >
                     <div>
                         <label htmlFor='routeName'>
@@ -288,7 +299,7 @@ class EditRoute extends Component {
                         <label htmlFor='routeSumm'>
                             Route Summary
                         </label>
-                        <input 
+                        <textarea 
                             type='text'
                             name='summary'
                             id='summary'
@@ -299,13 +310,14 @@ class EditRoute extends Component {
                         {this.state.routeSumm.touched && (
                             <ValidationError message={routeSummError} />
                         )}
-                        <div className='EditRouteCurrLoc'>
+                        <div className='EditRoute_currentLoc'>
                             <strong>Current Location:</strong><br/>
-                            City: {routeLocation.city}<br/>
-                            State/Province: {routeLocation.state_province}<br/>
-                            Country: {routeLocation.country}<br/>
+                            <i>City:</i> {routeLocation.city}<br/>
+                            <i>State/Province:</i> {routeLocation.state_province}<br/>
+                            <i>Country:</i> {routeLocation.country}<br/>
+                            <button className='showLocForm' onClick={() => this.handleShowLocForm()}>Change</button>
                         </div>
-                        <div className='EditRouteLocation'>
+                        <div className={this.state.locationForm}>
                             <label htmlFor='country'>
                                 Country
                             </label>
@@ -358,16 +370,16 @@ class EditRoute extends Component {
                             </select>
                         </div>
                     </div>
-                    <div className='CreateRouteButtons'>
-                        <button type='button' onClick={e => this.handleSubmit(e)}>
+                    <div className='EditRoute_formButtons'>
+                        <button className='editRouteButton' type='button' onClick={e => this.handleSubmit(e)}>
                             Save Changes
                         </button>
                         {' '}
-                        <button type='button' onClick={() => this.handleClickCancel()}>
+                        <button className='editRouteButton' type='button' onClick={() => this.handleClickCancel()}>
                             Cancel
                         </button>
                         {' '}
-                        <button type='button' onClick={() => this.handleDeleteRoute(parseInt(this.props.match.params.route_id))}>
+                        <button className='editRouteButton' type='button' onClick={() => this.handleDeleteRoute(parseInt(this.props.match.params.route_id))}>
                             Delete Route
                         </button>
                     </div>

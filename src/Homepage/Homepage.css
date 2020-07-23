@@ -1,17 +1,83 @@
-.Home {
+.HomePage {
     text-align: center;
     width: 90%;
-    margin-left: 0px auto 10px auto;
 }
 
-h2 {
+.homeTitle {
     font-size: 20px;
+    margin-top: 0px;
 }
 
-.HomeLink {
+.homePageTopImage {
+    width: 100%;
+}
+
+.homeSubTitle {
+    font-size: 15px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-top: 0.5px solid rgb(165, 165, 165);
+    border-bottom: 0.5px solid rgb(165, 165, 165);
+}
+
+.homeHeader {
+    width: 100%;
+}
+
+.homeLink {
     text-decoration: none;
+    color: rgb(15, 42, 77);
 }
 
 .HomePageImage {
     width: 70%;
+}
+
+.HomePage_browse, 
+.HomePage_create {
+    padding-top: 20px; 
+}
+
+.homeText {
+    padding: 0px 20px 20px 20px;
+}
+
+/*tablet and desktop adjustments*/
+@media (min-width: 800px) {
+    .homeTitle {
+        font-size: 30px;
+    }
+
+    .HomePage_intro {
+        display: flex;
+        flex-direction: row;
+        width: 80%;
+        margin: 0px auto 20px auto;
+        padding: 10px;
+        border-top: 0.5px solid rgb(165, 165, 165);
+        border-bottom: 0.5px solid rgb(165, 165, 165);
+    }
+
+    .homePageTopImage {
+        width: 30%;
+    }
+
+    .homeSubTitle {
+        font-size: 20px;
+        border: none;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+
+    .HomePage_features {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        margin-bottom: 50px;
+    }
+
+    .HomePage_browse, 
+    .HomePage_create {
+        width: 45%;
+    }
 }

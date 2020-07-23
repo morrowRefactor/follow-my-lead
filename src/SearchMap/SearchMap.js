@@ -20,7 +20,7 @@ class SearchMap extends Component {
 
     updateCoordinates = searchVal => {
         const str = searchVal.replace(/-/g, '+');
-        const fetchStr = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + str + '&key=' + `${config.GOOGLE_API_KEY}`
+        const fetchStr = `https://maps.googleapis.com/maps/api/geocode/json?address=${str}&key=${config.GOOGLE_API_KEY}`
 
         fetch(fetchStr)
         .then(response => response.json())
@@ -79,13 +79,13 @@ class SearchMap extends Component {
         )))
 
         return (
-            <div className='SearchMap'>
+            <div className='SearchMap featureBox'>
                 <form 
                     className='AddressForm'
                     onSubmit={this.setAddress}
                 >
                     <div className="form-group">
-                        <label htmlFor="Address">Address</label>
+                        <label htmlFor="Address" className='searchMapTitle'>Find Your Address</label>
                         <p className='searchText'>Search for an exact address ("20 W 34th St, New York, NY") OR by keyword ("Empire State Building NY").</p>
                         <input
                             type="text"
@@ -105,7 +105,7 @@ class SearchMap extends Component {
                     </button>
                 </form>
                 <MapComponent
-                    center={this.state.latitude, this.state.longitude}
+                    center={{ lat: this.state.latitude, lng: this.state.longitude }}
                     isMarkerShown
                     googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${config.GOOGLE_API_KEY}`}
                     loadingElement={<div style={{ height: `100%` }} />}

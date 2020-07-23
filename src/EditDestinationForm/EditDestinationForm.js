@@ -37,7 +37,6 @@ class EditDestination extends Component {
         })
     }
 
-    //manage form updates and field validation
     updateDest(dest) {
         this.setState({destination: {value: dest, touched: true}});
     }
@@ -72,7 +71,7 @@ class EditDestination extends Component {
             return obj.route_id === currentDest[0].route_id;
         })
         const excludeCurrentDest = allDestinations.filter(obj => {
-            return obj.sequence_num !== parseInt(this.props.match.params.dest_id)
+            return obj.sequence_num !== currentDest[0].sequence_num
         })
 
         const currentSeqNums = excludeCurrentDest.map(dest => dest.sequence_num);
@@ -96,15 +95,11 @@ class EditDestination extends Component {
         }
     }
 
-    //handle form submission and PATCH/DELETE requests
     handleSubmit = e => {
         e.preventDefault();
-        const currentDest = this.context.destinations.filter(obj => {
-            return obj.id === parseInt(this.props.match.params.dest_id)
-        })
 
         const input = {
-            route_id: currentDest[0].route_id,
+            route_id: this.state.route_id.value,
             destination: this.state.destination.value,
             content: this.state.content.value,
             sequence_num: parseInt(this.state.sequence_num.value),
@@ -113,6 +108,7 @@ class EditDestination extends Component {
             dest_lng: this.state.dest_lng.value
         }
 
+        //check if a new address has been submitted and if so update new location values
         if(this.context.selectedAddress2.address && this.context.selectedAddress2.address !== this.state.dest_address.value) {
             input.dest_address = this.context.selectedAddress2.address;
             input.dest_lat = this.context.selectedAddress2.lat;
@@ -188,17 +184,9 @@ class EditDestination extends Component {
             }
         }
 
-        const destRoute = this.context.routes.filter(obj => {
-            return obj.id === destToEdit.route_id
-        })
-        const destLocation = this.context.locations.filter(obj => {
-            return obj.id === destRoute[0].location_id
-        })
-        console.log('destroute', destRoute)
-        console.log('destloc', destLocation)
-
         return (
-            <div className='EditDestinationForm'>
+            <div className='EditDestinationForm featureBox'>
+                <h3 className='editDestTitle'>Edit your destination</h3>
                 <form
                     id='destination-form'
                     onSubmit={this.handleSubmit}
@@ -208,7 +196,6 @@ class EditDestination extends Component {
                         <input
                             type="text"
                             id="name"
-                            required
                             defaultValue={destToEdit.destination}
                             onChange={e => this.updateDest(e.target.value)}
                         />
@@ -216,10 +203,9 @@ class EditDestination extends Component {
                             <ValidationError message={destError} />
                         )}
                         <label htmlFor="description">Description</label>
-                        <input
+                        <textarea
                             type="text"
                             id="description"
-                            required
                             defaultValue={destToEdit.content}
                             onChange={e => this.updateContent(e.target.value)}
                         />
@@ -227,15 +213,14 @@ class EditDestination extends Component {
                             <ValidationError message={contentError} />
                         )}
                         <label htmlFor="address">Address</label>
-                        <p className='editDescText'>Use the map below if you'd like to update your destination.</p>
-                        
+                            <p className='editDestText editDestHighlight'>Use the map below if you'd like to update your destination.</p>
+                            <p className='editDestText'>Current Address:<br/>{destToEdit.formatted_address}</p>
                         <label htmlFor="sequence">Sequence Number</label>
-                        <p className='editDescText'>The current sequence number for this destination is {destToEdit.sequence_num}</p>
+                        <p className='editDestText'>This destination is currently number {destToEdit.sequence_num} for this route.</p>
                         <input
                             type="number"
                             id="sequence"
                             min="1"
-                            required
                             defaultValue={destToEdit.sequence_num}
                             onChange={e => this.updateSeqNum(e.target.value)}
                         />
@@ -243,17 +228,19 @@ class EditDestination extends Component {
                             <ValidationError message={seqNumError} />
                         )}
                     </div>
-                    <button type='submit'>
-                        Save Changes
-                    </button>
-                    {' '}
-                    <button type='button' onClick={() => this.handleDeleteDest(parseInt(this.props.match.params.dest_id), destToEdit.route_id)}>
-                        Delete Destination
-                    </button>
-                    {' '}
-                    <button type='button' onClick={() => this.handleClickCancel(destToEdit.route_id)}>
-                        Cancel
-                    </button>
+                    <div className='EditDestForm_buttons'>
+                        <button type='submit'>
+                            Save Changes
+                        </button>
+                        {' '}
+                        <button type='button' onClick={() => this.handleDeleteDest(parseInt(this.props.match.params.dest_id), destToEdit.route_id)}>
+                            Delete Destination
+                        </button>
+                        {' '}
+                        <button type='button' onClick={() => this.handleClickCancel(destToEdit.route_id)}>
+                            Cancel
+                        </button>
+                    </div>
                 </form>
             </div>
         )

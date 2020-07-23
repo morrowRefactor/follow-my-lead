@@ -1,21 +1,36 @@
 .RouteSummary {
     padding: 10px;
     margin: 10px auto 10px auto;
-    background-color: rgb(209, 207, 207);
+    background-color: rgb(230, 230, 230);
 }
 
 h3 {
     margin: 0px auto 0px auto;
 }
 
-.RouteLink {
-    text-decoration: none;
-}
-
-.RouteSummImage {
+.routeSummType {
+    font-size: 10px;
+    text-align: right;
+    margin: 0px auto 5px auto;
     width: 90%;
 }
 
-.Location {
-    text-align: left;
+.routeSummTitle {
+    margin: 0px auto 0px auto;
+}
+
+.routeLink {
+    text-decoration: none;
+}
+
+.routeSummImage {
+    width: 90%;
+}
+
+.location {
+    font-size: 13px;
+}
+
+.routeSummContent {
+    padding: 0px 10px 0px 10px;
 }

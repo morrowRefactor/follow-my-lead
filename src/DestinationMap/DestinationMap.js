@@ -9,7 +9,7 @@ class DestinationMap extends Component {
     render() {
         const MapComponent = withScriptjs(withGoogleMap((props) => (
             <GoogleMap
-                defaultZoom={16} 
+                defaultZoom={15} 
                 center={{ lat: this.props.destLat, lng: this.props.destLng }}
             >
                 {<Marker shape="rectangle" position={{ lat: this.props.destLat, lng: this.props.destLng }} />}
@@ -19,11 +19,11 @@ class DestinationMap extends Component {
         return (
             <section className="DestinationMap">
                 <MapComponent
-                    center={this.props.destLat, this.props.destLng}
+                    center={{ lat: this.props.destLat, lng: this.props.destLng }}
                     isMarkerShown
                     googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${config.GOOGLE_API_KEY}`}
                     loadingElement={<div style={{ height: `100%` }} />}
-                    containerElement={<div style={{ height: `300px` }} />}
+                    containerElement={<div style={{ height: `200px` }} />}
                     mapElement={<div style={{ height: `100%` }} />}
                 />
             </section>

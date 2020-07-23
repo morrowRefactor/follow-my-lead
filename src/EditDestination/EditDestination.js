@@ -10,8 +10,7 @@ class EditDestination extends Component {
     render() {
 
         return (
-            <div className='AddDestination'>
-                <h3>Add destinations to your route</h3>
+            <div className='EditDestination'>
                 <EditDestinationForm />
                 <SearchMap 
                     value={this.props}

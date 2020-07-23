@@ -2,6 +2,20 @@
     width: 90%;
     margin-left: auto;
     margin-right: auto;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.editRouteTitle {
+    border-bottom: 0.5px solid gray;
+    margin: 0px auto 5px 0px;
+    width: 90%;
+}
+
+.editRouteSubTitle {
+    margin: 0px;
+    font-size: 14px;
+    
 }
 
 #locationID {
@@ -16,11 +30,52 @@ h4 {
     margin-bottom: 0px;
 }
 
-.EditRouteCurrLoc {
-    font-size: 14px;
-    margin: 10px auto 10px auto;
+.showLocForm {
+    color: rgb(52, 87, 136);
+    text-decoration: underline;
+    border: none;
+    background-color: rgb(230, 230, 230);
+    padding: 0px;
 }
 
-.EditRouteLocation {
+.showLocForm:hover {
+    cursor: pointer;
+}
+
+.EditRoute_currentLoc {
+    font-size: 14px;
+    margin: 10px auto 10px auto;
+    padding: 0px 5px 0px 5px;
+}
+
+.EditRoute_locationForm {
+    padding: 0px 5px 0px 5px;
     margin-bottom: 20px;
+}
+
+.editRouteButton {
+    background-color: rgb(52, 87, 136);
+    color: white;
+    border: 0.5px solid rgb(37, 63, 99);
+    border-radius: 3px;
+    box-shadow: 0.5px 0.5px gray;
+    padding: 2px 5px 2px 5px;
+}
+
+input,
+select,
+textarea {
+    font-family: 'Quicksand', sans-serif;
+}
+
+/*tablet and desktop adjustments*/
+@media (min-width: 600px) {
+    .EditRoute {
+        width: 60%;
+    }
+
+    .EditRoute_locationForm {
+        padding: 0px 5px 0px 5px;
+        margin-bottom: 20px;
+    }
 }

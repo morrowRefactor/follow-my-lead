@@ -20,6 +20,7 @@ class RoutePage extends Component {
 
         let route = {
             name: '',
+            route_summ: '',
             routeType: 0,
             location: 0
         }
@@ -34,6 +35,7 @@ class RoutePage extends Component {
             if(this.context.routes[i].id === parseInt(routeID)) {
                 route = {
                     name: this.context.routes[i].route_name,
+                    route_summ: this.context.routes[i].route_summ,
                     routeType: this.context.routes[i].route_type_id,
                     location: this.context.routes[i].location_id
                 }
@@ -54,6 +56,7 @@ class RoutePage extends Component {
                 return dest.route_id === parseInt(routeID)
         })
 
+        //order destinations ascending
         routeDest.sort((a, b) => {
             return a.sequence_num - b.sequence_num;
         })
@@ -74,6 +77,7 @@ class RoutePage extends Component {
             />
         )
 
+        //use preset images based on route type
         let routeImage = '';
         if(route.routeType === 1) {
             routeImage = 'https://user-images.githubusercontent.com/58446465/87073383-d5c3da80-c20c-11ea-981a-1785988fcbeb.jpg'
@@ -87,18 +91,17 @@ class RoutePage extends Component {
 
         return (
             <section className="RoutePage">
-                <h3>{route.name}</h3>
-                <span>{location.city}, {location.state_province}</span>
-                <img className='RoutePageImage' src={routeImage} />
-                <div className='RoutePageButtons'>
-                    <button onClick={() => this.handleEditRoute(parseInt(routeID))}>Edit Route</button>
-                    {' '}
-                    <button onClick={() => this.handleAddDest(parseInt(routeID))}>Add Destination</button>
+                <div className='RoutePage_routeOverview'>
+                    <img className='routePageImage featureImage' src={routeImage} alt={route.name}/>
+                    <h3 className='routePageTitle'>{route.name}</h3>
+                    <div className='routePageEditLinks'><button className='routePageEditButton' onClick={() => this.handleEditRoute(parseInt(routeID))}>Edit Route</button>  |  <button className='routePageEditButton' onClick={() => this.handleAddDest(parseInt(routeID))}>Add Destinations</button></div>
+                    <p className='routePagePerts'>{location.city}, {location.state_province}<br/>{routeDest.length} stops on this route</p>
+                    <p className='routePageContent'>{route.route_summ}</p>
                 </div>
-                <div className='DestinationList'>
-                   {destinations}
+                <div className='RoutePage_destinationList'>
+                    {destinations}
                 </div>
-            </section>
+            </section> 
         )
     };
 }

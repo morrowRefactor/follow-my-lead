@@ -75,7 +75,7 @@ class CreateRoute extends Component {
             return obj.id === this.state.city.value
         })
         
-        const uniqueLocString = `${cityObj[0].name}` + '-' + `${stateObj[0].name}` + '-' + `${countryObj[0].name}`;
+        const uniqueLocString = `${cityObj[0].name}-${stateObj[0].name}-${countryObj[0].name}`;
         const uniqueLocClean = uniqueLocString.replace(/\s/g , "-");
 
         const input = {
@@ -189,10 +189,11 @@ class CreateRoute extends Component {
         });
 
         return (
-            <section className="CreateRoute">
-                <h3>Create a Custom Route</h3>
+            <section className='CreateRoute featureBox'>
+                <h3 className='createRouteTitle'>Create a Custom Route</h3>
+                <p className='createRouteSubTitle'>Start by providing a name, summary, and location for your route.</p>
                 <form 
-                    className='CreateRouteForm'
+                    className='CreateRoute_form'
                     onSubmit={e => this.handleSubmit(e)}
                 >
                     <div>
@@ -229,7 +230,7 @@ class CreateRoute extends Component {
                         <label htmlFor='routeSumm'>
                             Route Summary
                         </label>
-                        <input 
+                        <textarea 
                             type='text'
                             name='summary'
                             id='summary'
@@ -291,7 +292,7 @@ class CreateRoute extends Component {
                             )}
                         </select>
                     </div>
-                    <div className='CreateRouteButtons'>
+                    <div className='CreateRoute_buttons'>
                         <button type='submit'>
                             Save
                         </button>

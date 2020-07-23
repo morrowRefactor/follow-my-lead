@@ -3,3 +3,10 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+/*tablet and desktop adjustments*/
+@media (min-width: 600px) {
+    .AddDestination {
+        width: 60%;
+    }
+}

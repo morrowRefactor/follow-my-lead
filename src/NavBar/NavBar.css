@@ -1,65 +1,51 @@
-.topnav {
+.TopNav {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row-reverse;
-    background-color: gray;
-    border: none;
-    color: white;
+    border-bottom: none;
+    color: rgb(52, 87, 136);
     font-weight: bold;
     padding: 5px 10px 5px 10px;
     line-height: 40px;
     width: 100%;
     direction: rtl;
     margin-bottom: 25px;
-    box-shadow: 0px 6px rgb(0,0,0,0.2);
+    background-color: white;
+    box-shadow: 0px 3px rgba(52, 87, 136, 0.521);
 }
 
-.homelink {
-    color: white;
+.topNavLogo {
+    width: 30px;
+}
+
+.navTitle {
+    color: rgb(52, 87, 136);
     font-size: 20px;
     font-weight: bold;
     text-decoration: none;
 }
   
-.menu {
-    margin-right: 0px;
-    margin-left: auto;
-    direction: ltr;
-    min-width: 50px;
-    padding: 5px 5px 5px 5px;
-}
-  
-.topnav ul {
+.TopNav ul {
     list-style: none;
     margin: 0px 0px 0px auto;
     padding-right: 10px;
     direction: ltr;
 }
   
-.topnav li {
+.TopNav li {
     display: inline-block;
     padding-left: 20px;
 }
 
-.menulink {
-    text-decoration: none;
-    color: white;
-}
-  
-.menulink:hover {
-    cursor: pointer;
-    text-decoration: underline;
-}
-
-.main-title {
+.mainTitle {
     font-size: 18px;
 }
   
 .hamburger {
-    margin-left: auto;
     width: 20px;
     font-size: 18px;
     font-weight: bold;
+    margin-left: auto;
 }
     
 .hamburger:hover {
@@ -78,7 +64,6 @@
 }
 
 .hidden {
-    transition-timing-function: ease;
     display: none;
 }
 
@@ -87,20 +72,30 @@
     height: 0;
 }
 
-button,
-.navlink {
-    color: white;
-    background-color: gray;
+.navHamburger,
+.navLink {
+    color: rgb(52, 87, 136);
+    background-color: white;
     border: none;
     text-decoration: none;
     font-size: .90em;
 }
 
-button:hover {
+.navHamburger:hover {
     cursor: pointer;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 800px) {
+    .TopNav {
+        padding-right: 40px;
+        padding-left: 40px;
+    }
+
+    .navTitle,
+    .hamburger {
+        font-size: 24px;
+    }
+
     .menu {
       display: inline-block;
       margin-right: 0px;
@@ -108,5 +103,9 @@ button:hover {
       direction: ltr;
       min-width: 50px;
       padding: 5px 5px 5px 5px;
+    }
+
+    .navLink {
+        font-size: 18px;
     }
 }

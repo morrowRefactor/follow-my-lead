@@ -1,4 +1,33 @@
-.editDescText {
+.EditDestinationForm {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.editDestTitle {
+    border-bottom: 0.5px solid gray;
+    width: 90%;
+    margin-left: 0px;
+}
+
+.editDestText {
     font-size: 12px;
     margin: 3px auto 3px auto;
+}
+
+.editDestHighlight {
+    color: red;
+}
+
+.EditDestForm_buttons {
+    margin-top: 10px;
+}
+
+.EditDestForm_buttons > button {
+    margin-bottom: 5px;
+}
+
+input,
+select,
+textarea {
+    font-family: 'Quicksand', sans-serif;
 }

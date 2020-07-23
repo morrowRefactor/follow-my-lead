@@ -9,7 +9,6 @@ import AddDestination from '../AddDestination/AddDestination';
 import EditRoute from '../EditRoute/EditRoute';
 import EditDestination from '../EditDestination/EditDestination';
 import APIContext from '../APIContext';
-import DummyStore from '../dummy-store';
 import config from '../config';
 import './App.css';
 

@@ -3,16 +3,59 @@
     text-align: center;
 }
 
-.Filters {
+.browseRoutesTitle {
+    margin-top: 0px;
+}
+
+.browseRoutesSubTitle {
+    font-size: 16px;
+    padding-top: 5px;
+    margin-bottom: 20px;
+    width: 90%;
+    border-top: 0.5px solid rgb(184, 184, 184);
+}
+
+.BrowseRoutes_filters {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
     width: 90%;
     margin-right: auto;
     margin-left: auto;
+    padding-bottom: 10px;
+    border-bottom: 0.5px solid rgb(184, 184, 184);
 }
 
-button {
-    padding: 3px 10px 3px 10px;
+.browseRouteButton {
+    background-color: rgb(52, 87, 136);
+    color: white;
+    font-size: 14px;
+    padding: 2px 8px 2px 8px;
+    border: 1px solid rgb(30, 51, 80);
     border-radius: 5px;
+    box-shadow: 1px 1px gray;
+}
+
+.browseRouteButton:hover {
+    cursor: pointer;
+}
+
+/*tablet and desktop adjustments*/
+@media (min-width: 800px) {
+    .BrowseRoutes {
+        width: 90%;
+    }
+
+    .BrowseRoutes_nav {
+        width: 25%;
+        position: fixed;
+        top: 90px;
+        left: 10%;
+    }
+
+    .BrowseRoutes_routes {
+        width: 50%;
+        margin-right: 5%;
+        margin-left: auto;
+    }
 }
