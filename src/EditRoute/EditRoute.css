@@ -44,13 +44,16 @@ h4 {
 
 .EditRoute_currentLoc {
     font-size: 14px;
-    margin: 10px auto 10px auto;
-    padding: 0px 5px 0px 5px;
+    margin: 10px auto 0px auto;
 }
 
-.EditRoute_locationForm {
-    padding: 0px 5px 0px 5px;
-    margin-bottom: 20px;
+.editRouteHighlight {
+    color: red;
+    font-size: 12px;
+}
+
+.EditRoute_formButtons {
+    margin-top: 20px;
 }
 
 .editRouteButton {

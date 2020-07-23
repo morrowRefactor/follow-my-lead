@@ -23,6 +23,10 @@
     height: 80px;
 }
 
+.addDestFormHeader {
+    margin-bottom: 0px;
+}
+
 .addDestFormDescText {
     font-size: 12px;
     margin: 0px;

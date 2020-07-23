@@ -5,10 +5,8 @@ export default React.createContext({
     locations: [],
     routes: [],
     destinations: [],
-    selectedAddress: {},
-    selectedAddress2: {},
-    selectedDestLat: 1,
-    selectedDestLng: 1,
+    selectedAddyAddDest: {},
+    selectedAddyEditDest: {},
     navbar: '',
     toggleNav: () => {},
     setRoutes: () => {},
@@ -19,6 +17,6 @@ export default React.createContext({
     handlePatchDelete: () => {},
     updateRoute: () => {},
     updateLocation: () => {},
-    addyTransfer: () => {},
-    addyTransfer2: () => {}
+    addyTransferAddDest: () => {},
+    addyTransferEditDest: () => {}
 })

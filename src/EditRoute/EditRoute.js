@@ -215,13 +215,6 @@ class EditRoute extends Component {
         this.props.history.push('/browse-routes');
     }
 
-    handleShowLocForm = () => {
-        const css = (this.state.locationForm === 'hidden') ? 'EditRoute_locationForm' : 'hidden';
-        this.setState({
-            locationForm: css
-        })
-    }
-
     render() {
         const nameError = this.validateName();
         const routeSummError = this.validateRouteSumm();
@@ -262,114 +255,113 @@ class EditRoute extends Component {
                 <form 
                     className='EditRoute_editRouteForm'
                 >
-                    <div>
-                        <label htmlFor='routeName'>
-                            Route Name
-                        </label>
-                        <input 
-                            type='text'
-                            name='name'
-                            id='name'
-                            defaultValue={routeToEdit.route_name}
-                            onChange={e => this.updateName(e.target.value)}
-                            required
-                        />
-                        {this.state.name.touched && (
-                            <ValidationError message={nameError} />
+                    <label htmlFor='routeName'>
+                        Route Name
+                    </label>
+                    <input 
+                        type='text'
+                        name='routeName'
+                        id='routeName'
+                        aria-labelledby='routeName'
+                        defaultValue={routeToEdit.route_name}
+                        onChange={e => this.updateName(e.target.value)}
+                        required
+                    />
+                    {this.state.name.touched && (
+                        <ValidationError message={nameError} />
+                    )}
+                    <label htmlFor='routeType'>
+                        Type of Route
+                    </label>
+                    <select
+                        name='routeType'
+                        id='routeType'
+                        aria-labelledby='routeType'
+                        required
+                    >
+                        <option>Select</option>
+                        {this.context.routeTypes.map(type =>
+                            <option 
+                                value={type.route_type} 
+                                key={type.id}
+                                defaultValue={routeType}
+                            >
+                                {type.route_type}
+                            </option>
                         )}
-                        <label htmlFor='routeType'>
-                            Type of Route
-                        </label>
+                    </select>
+                    <label htmlFor='routeSumm'>
+                        Route Summary
+                    </label>
+                    <textarea 
+                        type='text'
+                        name='routeSumm'
+                        id='routeSumm'
+                        aria-labelledby='routeSumm'
+                        defaultValue={routeToEdit.route_summ}
+                        onChange={e => this.updateRouteSumm(e.target.value)}
+                        required
+                    />
+                    {this.state.routeSumm.touched && (
+                        <ValidationError message={routeSummError} />
+                    )}
+                    <div className='EditRoute_currentLoc'>
+                        <strong>Current Location:</strong><br/>
+                        <span className='editRouteHighlight'>Use the fields below if you'd like to change the current location or leave them blank to keep it the same</span><br/>
+                        <i>City:</i> {routeLocation.city}<br/>
+                        <i>State/Province:</i> {routeLocation.state_province}<br/>
+                        <i>Country:</i> {routeLocation.country}
+                    </div>
+                    <label htmlFor='country'>
+                        Country
+                    </label>
                         <select
-                            name='routeType'
-                            id='routeType'
-                            required
+                            name='country'
+                            id='country'
+                            defaultValue={routeLocation.country}
+                            onChange={e => this.updateCountry(e.target.value)}
                         >
-                            <option>Select</option>
-                            {this.context.routeTypes.map(type =>
-                                <option 
-                                    value={type.route_type} 
-                                    key={type.id}
-                                    defaultValue={routeType}
-                                >
-                                    {type.route_type}
+                        <option value=''>Select</option>
+                        {ICountry.map(country =>
+                            <option value={country.id} key={parseInt(country.id)}>
+                                {country.name}
+                            </option>
+                        )}
+                    </select>
+                    <label htmlFor='state_province'>
+                        State/Province
+                    </label>
+                        <select
+                            name='state_province'
+                            id='state_province'
+                            disabled={!this.state.country.touched}
+                            defaultValue={routeLocation.state_province}
+                            onChange={e => this.updateStateProvince(e.target.value)}
+                        >
+                            <option value=''>Select</option>
+                            {stateArray.map(prov =>
+                                <option value={prov.id} key={parseInt(prov.id)}>
+                                    {prov.name}
                                 </option>
                             )}
                         </select>
-                        <label htmlFor='routeSumm'>
-                            Route Summary
-                        </label>
-                        <textarea 
-                            type='text'
-                            name='summary'
-                            id='summary'
-                            defaultValue={routeToEdit.route_summ}
-                            onChange={e => this.updateRouteSumm(e.target.value)}
-                            required
-                        />
-                        {this.state.routeSumm.touched && (
-                            <ValidationError message={routeSummError} />
-                        )}
-                        <div className='EditRoute_currentLoc'>
-                            <strong>Current Location:</strong><br/>
-                            <i>City:</i> {routeLocation.city}<br/>
-                            <i>State/Province:</i> {routeLocation.state_province}<br/>
-                            <i>Country:</i> {routeLocation.country}<br/>
-                            <button className='showLocForm' onClick={() => this.handleShowLocForm()}>Change</button>
-                        </div>
-                        <div className={this.state.locationForm}>
-                            <label htmlFor='country'>
-                                Country
-                            </label>
-                            <select
-                                    name='country'
-                                    id='country'
-                                    defaultValue={routeLocation.country}
-                                    onChange={e => this.updateCountry(e.target.value)}
-                                >
-                                    <option value=''>Select</option>
-                                    {ICountry.map(country =>
-                                        <option value={country.id} key={parseInt(country.id)}>
-                                            {country.name}
-                                        </option>
-                                    )}
-                                </select>
-                            <label htmlFor='state_province'>
-                                State/Province
-                            </label>
-                            <select
-                                    name='state_province'
-                                    id='state_province'
-                                    disabled={!this.state.country.touched}
-                                    defaultValue={routeLocation.state_province}
-                                    onChange={e => this.updateStateProvince(e.target.value)}
-                                >
-                                    <option value=''>Select</option>
-                                    {stateArray.map(prov =>
-                                        <option value={prov.id} key={parseInt(prov.id)}>
-                                            {prov.name}
-                                        </option>
-                                    )}
-                                </select>
-                            <label htmlFor='city'>
-                                City
-                            </label>
-                            <select
-                                    name='city'
-                                    id='city'
-                                    disabled={!this.state.state_province.touched}
-                                    defaultValue={routeLocation.city}
-                                    onChange={e => this.updateCity(e.target.value)}
-                                >
-                                    <option value=''>Select</option>
-                                    {cityArray.map(city =>
-                                        <option value={city.id} key={parseInt(city.id)}>
-                                            {city.name}
-                                        </option>
-                                    )}
-                            </select>
-                        </div>
-                    </div>
+                    <label htmlFor='city'>
+                        City
+                    </label>
+                        <select
+                            name='city'
+                            id='city'
+                            disabled={!this.state.state_province.touched}
+                            defaultValue={routeLocation.city}
+                            onChange={e => this.updateCity(e.target.value)}
+                        >
+                            <option value=''>Select</option>
+                            {cityArray.map(city =>
+                                <option value={city.id} key={parseInt(city.id)}>
+                                    {city.name}
+                                </option>
+                            )}
+                        </select>
                     <div className='EditRoute_formButtons'>
                         <button className='editRouteButton' type='button' onClick={e => this.handleSubmit(e)}>
                             Save Changes

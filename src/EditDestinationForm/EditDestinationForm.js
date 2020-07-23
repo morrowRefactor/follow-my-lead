@@ -17,7 +17,8 @@ class EditDestination extends Component {
             sequence_num: { value: '', touched: false },
             dest_address: { value: '', touched: false },
             dest_lat: { value: '', touched: false },
-            dest_lng: { value: '', touched: false }
+            dest_lng: { value: '', touched: false },
+            selectedAddress: ''
         }
     }
 
@@ -33,7 +34,8 @@ class EditDestination extends Component {
             sequence_num: {value: currentDest[0].sequence_num, touched: false},
             dest_address: {value: currentDest[0].dest_address, touched: false},
             dest_lat: {value: currentDest[0].dest_lat, touched: false},
-            dest_lng: {value: currentDest[0].dest_lng, touched: false}
+            dest_lng: {value: currentDest[0].dest_lng, touched: false},
+            selectedAddress: 'not set'
         })
     }
 
@@ -82,16 +84,14 @@ class EditDestination extends Component {
     }
 
     checkAddressChange() {
-        const currentDest = this.context.destinations.filter(obj => {
-            return obj.id === parseInt(this.props.match.params.dest_id)
-        })
-
-        if(this.context.selectedAddress2.address && currentDest[0].dest_address !== this.context.selectedAddress2.address && this.state.dest_address.value !== this.context.selectedAddress2.address) {
-           this.setState({
-                dest_address: {value: this.context.selectedAddress2.address, touched: true},
-                dest_lat: {value: this.context.selectedAddress2.lat, touched: true},
-                dest_lng: {value: this.context.selectedAddress2.lng, touched: true}
-            })
+        if(this.context.selectedAddyEditDest.address && this.context.selectedAddyEditDest.address !== this.state.dest_address) {
+            return this.context.selectedAddyEditDest.address;
+        }
+        if(this.state.selectedAddress === 'not set') {
+            return this.state.dest_address.value;
+        }
+        else {
+            return this.state.dest_address.value;
         }
     }
 
@@ -109,10 +109,10 @@ class EditDestination extends Component {
         }
 
         //check if a new address has been submitted and if so update new location values
-        if(this.context.selectedAddress2.address && this.context.selectedAddress2.address !== this.state.dest_address.value) {
-            input.dest_address = this.context.selectedAddress2.address;
-            input.dest_lat = this.context.selectedAddress2.lat;
-            input.dest_lng = this.context.selectedAddress2.lng;
+        if(this.context.selectedAddyEditDest.address && this.context.selectedAddyEditDest.address !== this.state.dest_address.value) {
+            input.dest_address = this.context.selectedAddyEditDest.address;
+            input.dest_lat = this.context.selectedAddyEditDest.lat;
+            input.dest_lng = this.context.selectedAddyEditDest.lng;
         }
 
         this.handleUpdateDest(input);
@@ -175,6 +175,7 @@ class EditDestination extends Component {
         const destError = this.validateDest();
         const contentError = this.validateContent();
         const seqNumError = this.validateSeqNum();
+        const currAddy = this.checkAddressChange();
 
         let destToEdit = {};
         const destID = this.props.match.params.dest_id;
@@ -214,7 +215,7 @@ class EditDestination extends Component {
                         )}
                         <label htmlFor="address">Address</label>
                             <p className='editDestText editDestHighlight'>Use the map below if you'd like to update your destination.</p>
-                            <p className='editDestText'>Current Address:<br/>{destToEdit.formatted_address}</p>
+                            <p className='editDestText'>Current Address:<br/>{currAddy}</p>
                         <label htmlFor="sequence">Sequence Number</label>
                         <p className='editDestText'>This destination is currently number {destToEdit.sequence_num} for this route.</p>
                         <input

@@ -20,10 +20,8 @@ class App extends Component {
       locations: [],
       routes: [],
       destinations: [],
-      selectedAddress: {},
-      selectedAddress2: {},
-      selectedDestLat: 1,
-      selectedDestLng: 1,
+      selectedAddyAddDest: {},
+      selectedAddyEditDest: {},
       navbar: 'hidden'
     };
   }
@@ -106,15 +104,15 @@ class App extends Component {
     })
   }
 
-  addyTransfer = addy => {
+  addyTransferAddDest = addy => {
     this.setState({
-      selectedAddress: addy
+      selectedAddyAddDest: addy
     })
   }
 
-  addyTransfer2 = addy => {
+  addyTransferEditDest = addy => {
     this.setState({
-      selectedAddress2: addy
+      selectedAddyEditDest: addy
     })
   }
 
@@ -146,10 +144,12 @@ class App extends Component {
       locations: this.state.locations,
       routes: this.state.routes,
       destinations: this.state.destinations,
-      selectedAddress: this.state.selectedAddress,
-      selectedAddress2: this.state.selectedAddress2,
+      selectedAddyAddDest: this.state.selectedAddyAddDest,
+      selectedAddyEditDest: this.state.selectedAddyEditDest,
       navbar: this.state.navbar,
+      locForm: this.state.locForm,
       toggleNav: this.toggleNav,
+      toggleLocForm: this.toggleLocForm,
       setRoutes: this.setRoutes,
       addRoute: this.addRoute,
       addLocation: this.addLocation,
@@ -158,8 +158,8 @@ class App extends Component {
       handlePatchDelete: this.handlePatchDelete,
       updateRoute: this.updateRoute,
       updateLocation: this.updateLocation,
-      addyTransfer: this.addyTransfer,
-      addyTransfer2: this.addyTransfer2
+      addyTransferAddDest: this.addyTransferAddDest,
+      addyTransferEditDest: this.addyTransferEditDest
     }
 
     return (

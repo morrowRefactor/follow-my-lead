@@ -60,13 +60,13 @@ class DestinationForm extends Component {
         const input = {
             destination: this.state.name.value,
             content: this.state.description.value,
-            dest_address: this.context.selectedAddress.address,
+            dest_address: this.context.selectedAddyAddDest.address,
             sequence_num: parseInt(this.state.sequence_num.value),
             route_id: parseInt(routeID),
-            dest_lat: this.context.selectedAddress.lat,
-            dest_lng: this.context.selectedAddress.lng,
-            place_id: this.context.selectedAddress.place_id,
-            formatted_address: this.context.selectedAddress.formatted_address
+            dest_lat: this.context.selectedAddyAddDest.lat,
+            dest_lng: this.context.selectedAddyAddDest.lng,
+            place_id: this.context.selectedAddyAddDest.place_id,
+            formatted_address: this.context.selectedAddyAddDest.formatted_address
         }
 
        this.handleSubmit(input);
@@ -120,6 +120,7 @@ class DestinationForm extends Component {
         const numDest = this.context.destinations.filter(obj => {
             return obj.route_id === parseInt(this.props.route_id)
         })
+
         let finishClass = '';
         if(numDest.length < 1) {
             finishClass = 'hidden'
@@ -172,14 +173,14 @@ class DestinationForm extends Component {
                         {this.state.sequence_num.touched && (
                             <ValidationError message={seqError} />
                         )}
-                        <label htmlFor="address">Address</label>
+                        <p className='addDestFormHeader'>Address</p>
                         <p className='addDestFormDescText'>Use the map below to pinpoint your destination.</p>
-                        <p className='addDestFormAddyText'>Current Selected Address:<br/> {this.context.selectedAddress.address || `None selected`}</p>
+                        <p className='addDestFormAddyText'>Current Selected Address:<br/> {this.context.selectedAddyAddDest.address || `None selected`}</p>
                     </div>
                     <div className='AddDestinationForm_buttons'>
                         <button 
                             type='submit'
-                            disabled={!this.context.selectedAddress.formatted_address}
+                            disabled={!this.context.selectedAddyAddDest.formatted_address}
                         >
                             Add Destination
                         </button>

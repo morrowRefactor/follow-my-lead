@@ -61,10 +61,10 @@ class SearchMap extends Component {
             formatted_address: this.state.formatted_address
         }
         if(this.props.value.location.pathname.includes('create-route')) {
-            this.context.addyTransfer(selectedAddy);
+            this.context.addyTransferAddDest(selectedAddy);
         }
         if(this.props.value.location.pathname.includes('edit-destination')) {
-            this.context.addyTransfer2(selectedAddy);
+            this.context.addyTransferEditDest(selectedAddy);
         }
     }
 
@@ -85,7 +85,7 @@ class SearchMap extends Component {
                     onSubmit={this.setAddress}
                 >
                     <div className="form-group">
-                        <label htmlFor="Address" className='searchMapTitle'>Find Your Address</label>
+                        <label htmlFor="searchAddress" className='searchMapTitle'>Find Your Address</label>
                         <p className='searchText'>Search for an exact address ("20 W 34th St, New York, NY") OR by keyword ("Empire State Building NY").</p>
                         <input
                             type="text"

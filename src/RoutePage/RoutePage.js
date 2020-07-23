@@ -76,7 +76,7 @@ class RoutePage extends Component {
                 routeID={dest.route_id}
             />
         )
-
+        
         //use preset images based on route type
         let routeImage = '';
         if(route.routeType === 1) {
@@ -85,7 +85,7 @@ class RoutePage extends Component {
         if(route.routeType === 2) {
             routeImage = 'https://user-images.githubusercontent.com/58446465/87073369-d0669000-c20c-11ea-8e75-5f48a0f9aea3.jpg'
         }
-        else {
+        if(route.routeType === 3) {
             routeImage = 'https://user-images.githubusercontent.com/58446465/87073376-d3618080-c20c-11ea-9f06-1a89131e441c.jpg'
         }
 
