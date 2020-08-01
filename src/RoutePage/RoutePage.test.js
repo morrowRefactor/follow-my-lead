@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import App from './App';
-import './App.css';
+import RoutePage from './RoutePage';
+import './RoutePage.css';
 
-it('renders App without crashing', () => {
+it('renders RoutePage without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <BrowserRouter>
-      <App />
+      <RoutePage />
     </BrowserRouter>,
     div
   )

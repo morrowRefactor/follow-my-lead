@@ -21,31 +21,32 @@ class CreateRoute extends Component {
             state_province: { id: '', value: '', touched: false },
             country: { id: '', value: '', touched: false }
         }
-    }
+    };
 
+    // update state with form value inputs (controlled component)
     updateName(name) {
         this.setState({name: {value: name, touched: true}});
-    }
+    };
 
     updateRouteType(routeType) {
         this.setState({routeType: {value: routeType, touched: true}});
-    }
+    };
 
     updateRouteSumm(routeSumm) {
         this.setState({routeSumm: {value: routeSumm, touched: true}});
-    }
+    };
 
     updateCountry(country) {
         this.setState({country: {value: country, touched: true}});
-    }
+    };
 
     updateStateProvince(stateProvince) {
         this.setState({state_province: {value: stateProvince, touched: true}});
-    }
+    };
 
     updateCity(city) {
         this.setState({city: {value: city, touched: true}});
-    }
+    };
 
     
     validateName() {
@@ -53,18 +54,20 @@ class CreateRoute extends Component {
         if (name.length === 0) {
           return 'A route name is required';
         }
-    }
+    };
 
     validateRouteSumm() {
         const routeSumm = this.state.routeSumm.value.trim();
         if (routeSumm.length === 0) {
           return 'A route summary is required';
         }
-    }
+    };
 
+    // handle form submission, normalize data, pass on to functions that POST to route and/or location endpoints
     handleSubmit = e => {
         e.preventDefault();
 
+        // get location info from ICountry module based on form selections
         const countryObj = ICountry.filter(obj => {
             return obj.id === this.state.country.value
         })
@@ -78,6 +81,7 @@ class CreateRoute extends Component {
         const uniqueLocString = `${cityObj[0].name}-${stateObj[0].name}-${countryObj[0].name}`;
         const uniqueLocClean = uniqueLocString.replace(/\s/g , "-");
 
+        // normalized input with updated location information
         const input = {
             name: this.state.name.value,
             routeType: this.state.routeType.value,
@@ -95,6 +99,8 @@ class CreateRoute extends Component {
         })
         const checkLocation = this.context.locations.find(loc => loc.unique_loc === input.unique_loc);
         
+        // if a route is submitted with an existing location all that is needed is to POST the route itself (handleUpdateRoute), 
+        // otherwise a new location (handleUpdateLocation) needs to be POSTed and then the new route
         if(checkLocation) {
             newRoute = {
                 route_name: input.name,
@@ -119,6 +125,7 @@ class CreateRoute extends Component {
         }
     };
     
+    // POST a new location THEN POST the new route (route is relationally dependent on location)
     handleUpdateLocation(newLocation, newRoute) {
         fetch(`${config.API_ENDPOINT}/api/locations`, {
           method: 'POST',
@@ -141,10 +148,11 @@ class CreateRoute extends Component {
           })
           .catch(error => {
             this.setState({ error })
-        })
-    }
+        });
+    };
 
     handleUpdateRoute(newRoute, locID) {
+        // if a new location was created locID will be present, checking that first to append to route data
         if(locID) {
             newRoute.location_id = locID;
         }
@@ -170,8 +178,8 @@ class CreateRoute extends Component {
           })
           .catch(error => {
             this.setState({ error })
-          })
-    }
+          });
+    };
 
     handleClickCancel = () => {
         this.props.history.push('/')
@@ -182,10 +190,10 @@ class CreateRoute extends Component {
         const routeSummError = this.validateRouteSumm();
         const routeTypes = this.context.routeTypes;
         const stateArray = IState.filter(obj => {
-            return obj.country_id === this.state.country.value
+            return obj.country_id === this.state.country.value;
         });
         const cityArray = ICity.filter(obj => {
-            return obj.state_id === this.state.state_province.value
+            return obj.state_id === this.state.state_province.value;
         });
 
         return (
@@ -236,7 +244,7 @@ class CreateRoute extends Component {
                         name='routeSumm'
                         aria-labelledby='routeSumm'
                         id='routeSumm'
-                        defaultValue='Enter a brief summary of your route'
+                        placeholder='Enter a brief summary of your route'
                         onChange={e => this.updateRouteSumm(e.target.value)}
                         required
                     />
@@ -304,8 +312,8 @@ class CreateRoute extends Component {
                     </div>
                 </form>
             </section>
-        )
+        );
     };
-}
+};
 
 export default withRouter(CreateRoute);

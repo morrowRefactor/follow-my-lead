@@ -7,15 +7,16 @@ import './BrowseRoutes.css';
 class BrowseRoutes extends Component {
     static contextType = APIContext;
 
+    // shows routes based on user toggling routeTypes (tourist, historic, personal)
     handleFilter = type => {
         this.props.history.push(`/browse-routes/${type}`)
     };
-
 
     render() {
         const routeFilter = this.props.location.pathname;
         const allRoutes = this.context.routes;
 
+        // returns all routes that match the selected type (tourist, historic, personal), returns all by default 
         const routeTypes = this.context.routes.filter(function(routes) {
             if(routeFilter.includes('tourist')) {
                 return routes.route_type_id === 1
@@ -29,7 +30,7 @@ class BrowseRoutes extends Component {
             else {
                 return allRoutes
             }
-        }) 
+        });
 
         const routes = routeTypes.map(route =>
             <RouteSummary
@@ -59,8 +60,8 @@ class BrowseRoutes extends Component {
                    {routes} 
                 </div>
             </section>
-        )
+        );
     };
-}
+};
 
 export default withRouter(BrowseRoutes);

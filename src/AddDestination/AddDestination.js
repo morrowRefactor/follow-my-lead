@@ -8,14 +8,14 @@ class AddDestination extends Component {
         return (
             <div className='AddDestination'>
                 <DestinationForm 
-                    route_id={this.props.match.params.route_id}
+                    route_id={this.props.match? this.props.match.params.route_id : '1'}
                 />
                 <SearchMap 
                     value={this.props}    
                 /> 
             </div>
-        )
-    }
-}
+        );
+    };
+};
 
 export default AddDestination;

@@ -16,44 +16,46 @@ class DestinationForm extends Component {
             address: { value: '', touched: false },
             sequence_num: { value: '', touched: false }
         }
-    }
+    };
 
+    // update state with form value inputs (controlled component)
     updateName(name) {
         this.setState({name: {value: name, touched: true}});
-    }
+    };
 
     updateDesc(desc) {
         this.setState({description: {value: desc, touched: true}});
-    }
+    };
 
     updateSeqNum(num) {
         this.setState({sequence_num: {value: num, touched: true}});
-    }
+    };
 
     validateName() {
         const name = this.state.name.value.trim();
         if (name.length === 0) {
           return 'A destionation name is required';
-        }
-    }
+        };
+    };
 
     validateDesc() {
         const desc = this.state.description.value.trim();
         if (desc.length === 0) {
           return 'A description is required';
-        }
-    }
+        };
+    };
 
     validateSeqNum() {
         const currentDests = this.context.destinations.filter(obj => {
-            return obj.route_id === parseInt(this.props.route_id)
-        })
-        const currentSeqNums = currentDests.map(dest => dest.sequence_num)
+            return obj.route_id === parseInt(this.props.route_id);
+        });
+        const currentSeqNums = currentDests.map(dest => dest.sequence_num);
         if (currentSeqNums.includes(parseInt(this.state.sequence_num.value))) {
           return `Sequence number ${this.state.sequence_num.value} already exists in this route`;
-        }
-    }
+        };
+    };
 
+    // normalize form input values before passing to the POST function
     validateInput = e => {
         e.preventDefault();
         const routeID = this.props.route_id;
@@ -67,7 +69,7 @@ class DestinationForm extends Component {
             dest_lng: this.context.selectedAddyAddDest.lng,
             place_id: this.context.selectedAddyAddDest.place_id,
             formatted_address: this.context.selectedAddyAddDest.formatted_address
-        }
+        };
 
        this.handleSubmit(input);
     };
@@ -105,7 +107,7 @@ class DestinationForm extends Component {
     };
 
     handleClickCancel = () => {
-        this.props.history.push('/')
+        this.props.history.push('/');
     };
 
     render() {
@@ -113,26 +115,26 @@ class DestinationForm extends Component {
         const descError = this.validateDesc();
         const seqError = this.validateSeqNum();
 
+        // the option to finish adding destinations should only be visible if there's at least one destination associated with this route,
+        // this generates a className (visibility) dependant on the number of destinations
         const routeName = this.context.routes.filter(obj => {
-            return obj.id === parseInt(this.props.route_id)
-        })
-
+            return obj.id === parseInt(this.props.route_id);
+        }) || [];
         const numDest = this.context.destinations.filter(obj => {
-            return obj.route_id === parseInt(this.props.route_id)
-        })
-
+            return obj.route_id === parseInt(this.props.route_id);
+        });
         let finishClass = '';
         if(numDest.length < 1) {
-            finishClass = 'hidden'
-        }
+            finishClass = 'hidden';
+        };
         if(numDest.length >= 1) {
-            finishClass = 'addDestFormFinishRoute'
-        }
+            finishClass = 'addDestFormFinishRoute';
+        };
 
         return( 
             <div className='AddDestinationForm featureBox'>
                 <h3 className='addDestFormTitle'>Add Destinations to Your Route</h3>
-                <h3 className='addDestFormRouteTitle'>{routeName[0].route_name}</h3>
+                <h3 className='addDestFormRouteTitle'>{routeName[0]? routeName[0].route_name : 'Route Needed'}</h3>
                 <form
                     id='destination-form'
                     onSubmit={this.validateInput}
@@ -197,8 +199,8 @@ class DestinationForm extends Component {
                     <p className='addDestFormFinishRouteText'>I'm done adding destinations.  Let's see my route!</p>
                 </div>
             </div>
-        )
-    }
-}
+        );
+    };
+};
 
 export default withRouter(DestinationForm);

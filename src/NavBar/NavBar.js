@@ -18,8 +18,8 @@ class Navbar extends Component {
                     <li><Link className='navLink' to='/create-route'>Create Route</Link></li>
                 </ul>
             </nav>
-        )
-    }
-}
+        );
+    };
+};
 
 export default Navbar;

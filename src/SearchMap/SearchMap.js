@@ -15,12 +15,13 @@ class SearchMap extends Component {
             longitude: -73.985428,
             place_id: '',
             formatted_address: ''
-        }
-    }
+        };
+    };
 
+    // use the submitted address to fetch location info from Google Maps API
     updateCoordinates = searchVal => {
         const str = searchVal.replace(/-/g, '+');
-        const fetchStr = `https://maps.googleapis.com/maps/api/geocode/json?address=${str}&key=${config.GOOGLE_API_KEY}`
+        const fetchStr = `https://maps.googleapis.com/maps/api/geocode/json?address=${str}&key=${config.GOOGLE_API_KEY}`;
 
         fetch(fetchStr)
         .then(response => response.json())
@@ -36,37 +37,39 @@ class SearchMap extends Component {
         .catch(error => {
             console.error({error});
         });
-    }
+    };
 
+    // update the map when an address is searched
     setAddress = e => {
         e.preventDefault();
         const addy = document.getElementById('searchAddress').value;
         this.updateCoordinates(addy);
-    }
+    };
 
     toTitleCase = (addy) => {
         return addy.replace(/\w\S*/g, function(addy){
             return addy.charAt(0).toUpperCase() + addy.substr(1).toLowerCase();
         });
-    }
+    };
 
+    // normalize the confirmed address info and transfer the new location to other components via context
     confirmAddress = () => {
         const addy = document.getElementById('searchAddress').value;
-        const cleanAddy = this.toTitleCase(addy)
+        const cleanAddy = this.toTitleCase(addy);
         const selectedAddy = {
             address: cleanAddy,
             lat: this.state.latitude,
             lng: this.state.longitude,
             place_id: this.state.place_id,
             formatted_address: this.state.formatted_address
-        }
+        };
         if(this.props.value.location.pathname.includes('create-route')) {
             this.context.addyTransferAddDest(selectedAddy);
-        }
+        };
         if(this.props.value.location.pathname.includes('edit-destination')) {
             this.context.addyTransferEditDest(selectedAddy);
-        }
-    }
+        };
+    };
 
     render(){
         const MapComponent = withScriptjs(withGoogleMap((props) => (
@@ -76,7 +79,7 @@ class SearchMap extends Component {
             >
                 {<Marker shape="rectangle" position={{ lat: this.state.latitude, lng: this.state.longitude }} />}
             </GoogleMap>
-        )))
+        )));
 
         return (
             <div className='SearchMap featureBox'>
@@ -113,8 +116,8 @@ class SearchMap extends Component {
                     mapElement={<div style={{ height: `100%` }} />}
                 />
             </div>
-        )
-    }
-}
+        );
+    };
+};
 
 export default SearchMap;

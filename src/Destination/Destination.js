@@ -9,7 +9,7 @@ class Destination extends Component {
 
     handleClickEdit = () => {
         this.props.history.push(`/edit-destination/${this.props.destID}`);
-    }
+    };
 
     render() {
         const googleURL = `https://www.google.com/maps/dir/?api=1&destination=${this.props.formAddress}&destination_place_id=${this.props.placeID}`;
@@ -26,8 +26,8 @@ class Destination extends Component {
                 <p className='destinationContent'>{this.props.content}</p>
                 <a className='destinationStartButton' href={googleURL} target='_blank' rel="noopener noreferrer">Let's Go!</a>
             </section>
-        )
+        );
     };
-}
+};
 
 export default withRouter(Destination);

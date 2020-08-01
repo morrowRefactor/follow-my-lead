@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import App from './App';
-import './App.css';
+import ValidationError from './ValidationError';
+import './ValidationError.css';
 
-it('renders App without crashing', () => {
+it('renders ValidationError without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <BrowserRouter>
-      <App />
+      <ValidationError />
     </BrowserRouter>,
     div
   )

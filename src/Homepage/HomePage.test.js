@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import App from './App';
-import './App.css';
+import HomePage from './Homepage';
+import './Homepage.css';
 
-it('renders App without crashing', () => {
+it('renders HomePage without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <BrowserRouter>
-      <App />
+      <HomePage />
     </BrowserRouter>,
     div
   )

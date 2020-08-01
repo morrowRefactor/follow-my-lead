@@ -8,7 +8,6 @@ class EditDestination extends Component {
     static contextType = APIContext;
 
     render() {
-
         return (
             <div className='EditDestination'>
                 <EditDestinationForm />
@@ -16,8 +15,8 @@ class EditDestination extends Component {
                     value={this.props}
                 /> 
             </div>
-        )
-    }
-}
+        );
+    };
+};
 
 export default EditDestination;

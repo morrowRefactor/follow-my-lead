@@ -19,70 +19,76 @@ class EditDestination extends Component {
             dest_lat: { value: '', touched: false },
             dest_lng: { value: '', touched: false },
             selectedAddress: ''
-        }
-    }
+        };
+    };
 
+    // sets the default state values to those of the current fields as they exist in the db
     componentDidMount() {
         const currentDest = this.context.destinations.filter(obj => {
             return obj.id === parseInt(this.props.match.params.dest_id)
-        })
-
+        });
+        
         this.setState({
-            destination: {value: currentDest[0].destination, touched: false},
-            content: {value: currentDest[0].content, touched: false},
-            route_id: {value: currentDest[0].route_id, touched: false},
-            sequence_num: {value: currentDest[0].sequence_num, touched: false},
-            dest_address: {value: currentDest[0].dest_address, touched: false},
-            dest_lat: {value: currentDest[0].dest_lat, touched: false},
-            dest_lng: {value: currentDest[0].dest_lng, touched: false},
+            destination: {value: currentDest[0]? currentDest[0].destination : 'Destination Needed', touched: false},
+            content: {value: currentDest[0]? currentDest[0].content : 'Content Needed', touched: false},
+            route_id: {value: currentDest[0]? currentDest[0].route_id : 'RouteID Needed', touched: false},
+            sequence_num: {value: currentDest[0]? currentDest[0].sequence_num : 'Sequence Number Needed', touched: false},
+            dest_address: {value: currentDest[0]? currentDest[0].dest_address : 'Address Needed', touched: false},
+            dest_lat: {value: currentDest[0]? currentDest[0].dest_lat : 'Destination Latitude Needed', touched: false},
+            dest_lng: {value: currentDest[0]? currentDest[0].dest_lng : 'Destination Longitude Needed', touched: false},
             selectedAddress: 'not set'
-        })
-    }
+        });
+    };
 
+    // update state with form value inputs (controlled component)
     updateDest(dest) {
         this.setState({destination: {value: dest, touched: true}});
-    }
+    };
 
     updateContent(content) {
         this.setState({content: {value: content, touched: true}});
-    }
+    };
 
     updateSeqNum(num) {
         this.setState({sequence_num: {value: num, touched: true}});
-    }
+    };
 
     validateDest() {
         const dest = this.state.destination.value.trim();
         if (dest.length === 0) {
           return 'A destination name is required';
-        }
-    }
+        };
+    };
 
     validateContent() {
         const con = this.state.content.value.trim();
         if (con.length === 0) {
           return 'A destination summary is required';
-        }
-    }
+        };
+    };
 
+    // find the current destination being edited, the route it's associated with, 
+    // and then pull all the current sequence numbers for that route to flag any duplication
     validateSeqNum() {
         const currentDest = this.context.destinations.filter(obj => {
-            return obj.id === parseInt(this.props.match.params.dest_id)
-        })
+            return obj.id === parseInt(this.props.match.params.dest_id);
+        });
         const allDestinations = this.context.destinations.filter(obj => {
             return obj.route_id === currentDest[0].route_id;
-        })
+        });
         const excludeCurrentDest = allDestinations.filter(obj => {
-            return obj.sequence_num !== currentDest[0].sequence_num
-        })
+            return obj.sequence_num !== currentDest[0].sequence_num;
+        });
 
         const currentSeqNums = excludeCurrentDest.map(dest => dest.sequence_num);
 
         if (currentSeqNums.includes(parseInt(this.state.sequence_num.value))) {
           return `Sequence number ${this.state.sequence_num.value} already exists in this route`;
-        }
-    }
+        };
+    };
 
+    // check whether an address was submitted via a map component, and if so, whether that value matches the current state
+    // this populates the area of the form displaying the currently selected address
     checkAddressChange() {
         if(this.context.selectedAddyEditDest.address && this.context.selectedAddyEditDest.address !== this.state.dest_address) {
             return this.context.selectedAddyEditDest.address;
@@ -93,7 +99,7 @@ class EditDestination extends Component {
         else {
             return this.state.dest_address.value;
         }
-    }
+    };
 
     handleSubmit = e => {
         e.preventDefault();
@@ -106,14 +112,14 @@ class EditDestination extends Component {
             dest_address: this.state.dest_address.value,
             dest_lat: this.state.dest_lat.value,
             dest_lng: this.state.dest_lng.value
-        }
+        };
 
         //check if a new address has been submitted and if so update new location values
         if(this.context.selectedAddyEditDest.address && this.context.selectedAddyEditDest.address !== this.state.dest_address.value) {
             input.dest_address = this.context.selectedAddyEditDest.address;
             input.dest_lat = this.context.selectedAddyEditDest.lat;
             input.dest_lng = this.context.selectedAddyEditDest.lng;
-        }
+        };
 
         this.handleUpdateDest(input);
     };
@@ -141,7 +147,7 @@ class EditDestination extends Component {
             }) 
         
         this.props.history.push(`/routes/${input.route_id}`); 
-    }
+    };
 
     handleDeleteDest = (destID, routeID) => {
         fetch(`${config.API_ENDPOINT}/api/destinations/${destID}`, {
@@ -165,7 +171,7 @@ class EditDestination extends Component {
               this.setState({ error })
         })
         this.props.history.push(`/routes/${routeID}`);
-    }
+    };
 
     handleClickCancel = (routeID) => {
         this.props.history.push(`/routes/${parseInt(routeID)}`);
@@ -183,7 +189,7 @@ class EditDestination extends Component {
             if (this.context.destinations[i].id === parseInt(destID)) {
                 destToEdit = this.context.destinations[i];
             }
-        }
+        };
 
         return (
             <div className='EditDestinationForm featureBox'>
@@ -244,8 +250,8 @@ class EditDestination extends Component {
                     </div>
                 </form>
             </div>
-        )
+        );
     };
-}
+};
 
 export default withRouter(EditDestination);

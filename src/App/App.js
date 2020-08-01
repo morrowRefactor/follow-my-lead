@@ -24,7 +24,7 @@ class App extends Component {
       selectedAddyEditDest: {},
       navbar: 'hidden'
     };
-  }
+  };
 
   updateState = () => {
     Promise.all([
@@ -32,7 +32,7 @@ class App extends Component {
       fetch(`${config.API_ENDPOINT}/api/route-types`),
       fetch(`${config.API_ENDPOINT}/api/routes`),
       fetch(`${config.API_ENDPOINT}/api/destinations`)
-  ])
+    ])
       .then(([locRes, routeTypeRes, routesRes, destRes]) => {
           if (!locRes.ok)
               return locRes.json().then(e => Promise.reject(e));
@@ -55,66 +55,55 @@ class App extends Component {
       .catch(error => {
           console.error({error});
       });
-  }
+  };
 
   componentDidMount() {
       this.updateState();
-  }
+  };
 
+  // toggle the show/hide of the navbar dropdown menu
   toggleNav = () => {
     const css = (this.state.navbar === 'hidden') ? 'show' : 'hidden';
     this.setState({
       navbar: css
-    })
-  }
+    });
+  };
 
   setRoutes = routes => {
     this.setState({
       routes: routes
     });
-  }
+  };
 
   setDestinations = dest => {
     this.setState({
       destinations: dest
     });
-  }
+  };
 
   addLocation = (location) => {
     const newLocation = this.state.locations;
     newLocation.push(location);
     this.setState({
       locations: newLocation
-    })
-  }
+    });
+  };
 
   addRoute = route => {
     const newRoute = this.state.routes;
     newRoute.push(route);
     this.setState({
       routes: newRoute
-    })
-  }
+    });
+  };
 
   addDest = dest => {
     const newDest = this.state.destinations;
     newDest.push(dest);
     this.setState({
       destinations: newDest
-    })
-  }
-
-  addyTransferAddDest = addy => {
-    this.setState({
-      selectedAddyAddDest: addy
-    })
-  }
-
-  addyTransferEditDest = addy => {
-    this.setState({
-      selectedAddyEditDest: addy
-    })
-  }
+    });
+  };
 
   updateRoute = route => {
     const updateRoutes = this.state.routes.filter(obj => {
@@ -123,20 +112,34 @@ class App extends Component {
     updateRoutes.push(route);
     this.setState({
       routes: updateRoutes
-    })
-  }
+    });
+  };
 
   updateLocation = loc => {
     const newLoc = this.state.locations;
     newLoc.push(loc);
     this.setState({
       locations: newLoc
-    })
-  }
+    });
+  };
 
+  // addyTransfers transport address searches in map components to others via context
+  addyTransferAddDest = addy => {
+    this.setState({
+      selectedAddyAddDest: addy
+    });
+  };
+
+  addyTransferEditDest = addy => {
+    this.setState({
+      selectedAddyEditDest: addy
+    });
+  };
+
+  // updates the app state after patch/delete calls are resolves within other components
   handlePatchDelete = () => {
     this.updateState();
-  }
+  };
 
   render() {
     const value = {
@@ -160,7 +163,7 @@ class App extends Component {
       updateLocation: this.updateLocation,
       addyTransferAddDest: this.addyTransferAddDest,
       addyTransferEditDest: this.addyTransferEditDest
-    }
+    };
 
     return (
       <APIContext.Provider value={value}>
@@ -200,8 +203,8 @@ class App extends Component {
           />
         </div>
       </APIContext.Provider>
-    )
+    );
   };
-}
+};
 
 export default App;

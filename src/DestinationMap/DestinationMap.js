@@ -14,7 +14,7 @@ class DestinationMap extends Component {
             >
                 {<Marker shape="rectangle" position={{ lat: this.props.destLat, lng: this.props.destLng }} />}
             </GoogleMap>
-        )))
+        )));
 
         return (
             <section className="DestinationMap">
@@ -27,8 +27,8 @@ class DestinationMap extends Component {
                     mapElement={<div style={{ height: `100%` }} />}
                 />
             </section>
-        )
+        );
     };
-}
+};
 
 export default DestinationMap;

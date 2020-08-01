@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import App from './App';
-import './App.css';
+import BrowseRoutes from './BrowseRoutes';
+import './BrowseRoutes.css';
 
-it('renders App without crashing', () => {
+it('renders BrowseRoutes without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <BrowserRouter>
-      <App />
+      <BrowseRoutes />
     </BrowserRouter>,
     div
   )

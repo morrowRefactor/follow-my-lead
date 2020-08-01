@@ -7,7 +7,6 @@ class Homepage extends Component {
     static contextType = APIContext;
 
     render() {
-
         return (
             <section className="HomePage">
                 <h2 className='homeTitle'>Get an insider's tour of places all over the world</h2>
@@ -28,8 +27,8 @@ class Homepage extends Component {
                     </div>
                 </section>
             </section>
-        )
+        );
     };
-}
+};
 
 export default Homepage;
